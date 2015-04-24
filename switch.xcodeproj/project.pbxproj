@@ -35,6 +35,8 @@
 		53412D6E1ACCA268009CB1AB /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53412D6D1ACCA268009CB1AB /* CoreBluetooth.framework */; };
 		53412D711ACCB8DD009CB1AB /* PeripheralVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53412D701ACCB8DD009CB1AB /* PeripheralVC.m */; };
 		53E825A71ACE073400ADD347 /* BluetoothComm.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E825A61ACE073400ADD347 /* BluetoothComm.m */; };
+		53FD5BF11AE9CF82004B0A6F /* SelectConnectorsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53FD5BF01AE9CF82004B0A6F /* SelectConnectorsVC.m */; };
+		53FD5BF41AE9FD8D004B0A6F /* SummaryVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53FD5BF31AE9FD8D004B0A6F /* SummaryVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +91,10 @@
 		53412D701ACCB8DD009CB1AB /* PeripheralVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeripheralVC.m; sourceTree = "<group>"; };
 		53E825A51ACE073400ADD347 /* BluetoothComm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothComm.h; sourceTree = "<group>"; };
 		53E825A61ACE073400ADD347 /* BluetoothComm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothComm.m; sourceTree = "<group>"; };
+		53FD5BEF1AE9CF82004B0A6F /* SelectConnectorsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectConnectorsVC.h; sourceTree = "<group>"; };
+		53FD5BF01AE9CF82004B0A6F /* SelectConnectorsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectConnectorsVC.m; sourceTree = "<group>"; };
+		53FD5BF21AE9FD8D004B0A6F /* SummaryVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SummaryVC.h; sourceTree = "<group>"; };
+		53FD5BF31AE9FD8D004B0A6F /* SummaryVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SummaryVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,10 +157,14 @@
 				53177D901AE71B8A00056724 /* HomeVC.m */,
 				53177D921AE71FA300056724 /* AddSwitchVC.h */,
 				53177D931AE71FA300056724 /* AddSwitchVC.m */,
-				53177D951AE744AF00056724 /* CreateSwitchVC.h */,
-				53177D961AE744AF00056724 /* CreateSwitchVC.m */,
 				53177D9E1AE8AB7A00056724 /* NameSwitchVC.h */,
 				53177D9F1AE8AB7A00056724 /* NameSwitchVC.m */,
+				53FD5BEF1AE9CF82004B0A6F /* SelectConnectorsVC.h */,
+				53FD5BF01AE9CF82004B0A6F /* SelectConnectorsVC.m */,
+				53FD5BF21AE9FD8D004B0A6F /* SummaryVC.h */,
+				53FD5BF31AE9FD8D004B0A6F /* SummaryVC.m */,
+				53177D951AE744AF00056724 /* CreateSwitchVC.h */,
+				53177D961AE744AF00056724 /* CreateSwitchVC.m */,
 				53412D4B1ACC9737009CB1AB /* ViewController.h */,
 				53412D4C1ACC9737009CB1AB /* ViewController.m */,
 				53412D6F1ACCB8DD009CB1AB /* PeripheralVC.h */,
@@ -325,7 +335,9 @@
 				53177D941AE71FA300056724 /* AddSwitchVC.m in Sources */,
 				53177D911AE71B8A00056724 /* HomeVC.m in Sources */,
 				53412D471ACC9737009CB1AB /* main.m in Sources */,
+				53FD5BF11AE9CF82004B0A6F /* SelectConnectorsVC.m in Sources */,
 				53177D9A1AE8A75700056724 /* DataManager.m in Sources */,
+				53FD5BF41AE9FD8D004B0A6F /* SummaryVC.m in Sources */,
 				53E825A71ACE073400ADD347 /* BluetoothComm.m in Sources */,
 				53177DA01AE8AB7A00056724 /* NameSwitchVC.m in Sources */,
 			);

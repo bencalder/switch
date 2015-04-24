@@ -46,6 +46,13 @@
 }
 
 
+- (IBAction)unwindFromNameSwitch:(UIStoryboardSegue *)sender
+{
+ NSLog(@"Unwind from NameSwitchVC");
+    // Pull any data from the view controller which initiated the unwind segue.
+}
+
+
 - (void)scanForPeripherals
 {
  if ([self.btComm activePeripheral])
@@ -66,14 +73,14 @@
  self.btComm.delegate = self;
  NSLog(@"Scanning for peripherals.");
 
- [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(scanTimer:) userInfo:nil repeats:NO];
+ [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(scanTimer:) userInfo:nil repeats:NO];
  
  self.searchingProgressF = 0.0;
  [self progress:nil];
  
  self.uuidMA = NSMutableArray.new;  // make new array to add UUID's to
  
- [self.btComm findPeripheralsWithTimeout:3];
+ [self.btComm findPeripheralsWithTimeout:2];
 }
 
 
@@ -103,13 +110,13 @@
 {
  self.searchingProgressF += 0.1;
  
- if (self.searchingProgressF > 3)
+ if (self.searchingProgressF > 2)
     {
     self.searchingPV.hidden = YES;
     return;
     }
  
- self.searchingPV.progress = self.searchingProgressF / 3.0;
+ self.searchingPV.progress = self.searchingProgressF / 2.0;
  
  [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(progress:) userInfo:nil repeats:NO];
 }

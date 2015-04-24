@@ -7,8 +7,12 @@
 //
 
 #import "HomeVC.h"
+#import <Parse/Parse.h>
 
 @interface HomeVC ()
+
+@property (strong, nonatomic) NSArray *switchIdA,
+                                      *switchA;
 
 @end
 
@@ -30,10 +34,57 @@
 }
 
 
+- (IBAction)unwindToHomeFromSummary:(UIStoryboardSegue *)sender
+{
+ NSLog(@"Unwind to Home from SummaryVC");
+    // Pull any data from the view controller which initiated the unwind segue.
+}
+
+
 - (void)viewDidLoad
 {
  [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+ [super viewDidAppear:animated];
+ 
+ [self loadSwitchArray];
+}
+
+
+- (void)loadSwitchArray
+{
+ NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+ 
+ if (((NSArray *)[defaults objectForKey:@"switchArray"]).count > 0)
+    {
+    self.switchIdA = [defaults objectForKey:@"switchArray"];
+    
+    [self lookupSwitchData];
+    }
+}
+
+
+- (void)lookupSwitchData
+{
+ PFQuery *query = [PFQuery queryWithClassName:@"WirelessSwitch"];
+ 
+ [query whereKey:@"objectId" containedIn:self.switchA];
+ 
+ [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+    {
+    if (!error)
+       {
+       self.switchA = objects;
+       }
+    else NSLog(@"Error: %@ %@", error, [error userInfo]);
+    }
+ ];
+
 }
 
 

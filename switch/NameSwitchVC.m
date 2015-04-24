@@ -29,13 +29,25 @@
 }
 
 
+- (IBAction)unwindFromSelectAccessory:(UIStoryboardSegue *)sender
+{
+ NSLog(@"Unwind from SelectAccessoryVC");
+    // Pull any data from the view controller which initiated the unwind segue.
+}
+
+
 - (void)viewDidLoad
 {
  [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
  self.sharedData = [DataManager sharedDataManager];
- NSLog(@"Switch: %@", self.sharedData.freshSwitchPFO);
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+ [super viewDidAppear:animated];
+ 
+ [self.nameTF becomeFirstResponder];
 }
 
 
