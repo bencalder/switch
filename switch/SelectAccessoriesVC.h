@@ -1,5 +1,5 @@
 //
-//  SelectConnectorsVC.h
+//  SelectAccessoriesVC.h
 //  switch
 //
 //  Created by Ben Calder on 4/23/15.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SelectConnectorsVC : UIViewController
+@interface SelectAccessoriesVC : UIViewController
 
 @end

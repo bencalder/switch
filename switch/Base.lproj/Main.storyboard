@@ -344,10 +344,10 @@
             </objects>
             <point key="canvasLocation" x="2302" y="117"/>
         </scene>
-        <!--Select ConnectorsVC-->
+        <!--Select AccessoriesVC-->
         <scene sceneID="WjC-0Y-cfj">
             <objects>
-                <viewController id="Jmo-Ra-Of2" customClass="SelectConnectorsVC" sceneMemberID="viewController">
+                <viewController id="Jmo-Ra-Of2" customClass="SelectAccessoriesVC" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yFo-5R-Zy2"/>
                         <viewControllerLayoutGuide type="bottom" id="8Dk-Gt-zKo"/>
@@ -366,7 +366,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="buttonPress:" destination="QQf-E6-LH1" eventType="touchUpInside" id="nnK-dB-Hws"/>
+                                    <action selector="buttonPress:" destination="Jmo-Ra-Of2" eventType="touchUpInside" id="dGR-Wi-86a"/>
                                     <segue destination="mUo-cg-jtw" kind="unwind" unwindAction="unwindFromSelectAccessory:" id="eFJ-Lu-oA1"/>
                                 </connections>
                             </button>

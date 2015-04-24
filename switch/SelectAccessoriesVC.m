@@ -1,16 +1,16 @@
 //
-//  SelectConnectorsVC.m
+//  SelectAccessoriesVC.m
 //  switch
 //
 //  Created by Ben Calder on 4/23/15.
 //  Copyright (c) 2015 BTS. All rights reserved.
 //
 
-#import "SelectConnectorsVC.h"
+#import "SelectAccessoriesVC.h"
 #import <Parse/Parse.h>
 #import "DataManager.h"
 
-@interface SelectConnectorsVC () <UITableViewDataSource, UITableViewDelegate>
+@interface SelectAccessoriesVC () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *backB,
                                               *doneB;
@@ -34,7 +34,7 @@
 
 @end
 
-@implementation SelectConnectorsVC
+@implementation SelectAccessoriesVC
 
 
 - (IBAction)buttonPress:(id)sender
