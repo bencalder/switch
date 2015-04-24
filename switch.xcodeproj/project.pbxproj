@@ -126,23 +126,10 @@
 		53412D381ACC9737009CB1AB = {
 			isa = PBXGroup;
 			children = (
-				53188E301AE6F80100AFB44C /* AudioToolbox.framework */,
-				53188E311AE6F80100AFB44C /* CFNetwork.framework */,
-				53188E321AE6F80100AFB44C /* CoreGraphics.framework */,
-				53188E331AE6F80100AFB44C /* CoreLocation.framework */,
-				53188E341AE6F80100AFB44C /* libsqlite3.dylib */,
-				53188E351AE6F80100AFB44C /* libz.dylib */,
-				53188E361AE6F80100AFB44C /* MobileCoreServices.framework */,
-				53188E371AE6F80100AFB44C /* QuartzCore.framework */,
-				53188E381AE6F80100AFB44C /* Security.framework */,
-				53188E391AE6F80100AFB44C /* StoreKit.framework */,
-				53188E3A1AE6F80100AFB44C /* SystemConfiguration.framework */,
-				53188E2C1AE6F79500AFB44C /* Bolts.framework */,
-				53188E2D1AE6F79500AFB44C /* Parse.framework */,
-				53412D6D1ACCA268009CB1AB /* CoreBluetooth.framework */,
 				53412D431ACC9737009CB1AB /* switch */,
 				53412D5D1ACC9737009CB1AB /* switchTests */,
 				53412D421ACC9737009CB1AB /* Products */,
+				53FD5BEE1AE9C1AC004B0A6F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -208,6 +195,27 @@
 				53412D5F1ACC9737009CB1AB /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		53FD5BEE1AE9C1AC004B0A6F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				53188E301AE6F80100AFB44C /* AudioToolbox.framework */,
+				53188E311AE6F80100AFB44C /* CFNetwork.framework */,
+				53188E321AE6F80100AFB44C /* CoreGraphics.framework */,
+				53188E331AE6F80100AFB44C /* CoreLocation.framework */,
+				53188E341AE6F80100AFB44C /* libsqlite3.dylib */,
+				53188E351AE6F80100AFB44C /* libz.dylib */,
+				53188E361AE6F80100AFB44C /* MobileCoreServices.framework */,
+				53188E371AE6F80100AFB44C /* QuartzCore.framework */,
+				53188E381AE6F80100AFB44C /* Security.framework */,
+				53188E391AE6F80100AFB44C /* StoreKit.framework */,
+				53188E3A1AE6F80100AFB44C /* SystemConfiguration.framework */,
+				53188E2C1AE6F79500AFB44C /* Bolts.framework */,
+				53188E2D1AE6F79500AFB44C /* Parse.framework */,
+				53412D6D1ACCA268009CB1AB /* CoreBluetooth.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

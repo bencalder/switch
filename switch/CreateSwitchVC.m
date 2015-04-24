@@ -12,8 +12,8 @@
 
 @interface CreateSwitchVC () <UITableViewDataSource, UITableViewDelegate, BTDelegate, UIAlertViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIButton *backB;
-@property (weak, nonatomic) IBOutlet UIButton *doneB;
+@property (weak, nonatomic) IBOutlet UIButton *backB,
+                                              *doneB;
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *scanningAI;
 
@@ -22,26 +22,22 @@
 @property (strong, nonatomic) BluetoothComm *btComm;
 
 @property (strong, nonatomic) NSArray *boardA,
-                                      *pinCountDisplayA,
-                                      *pinCountA;
+                                      *connectorTypeA,
+                                      *relayDisplayA;
 
 @property (strong, nonatomic) NSMutableArray *peripheralMA,
-                                             *brandMA,
                                              *connectorsMA,
                                              *relaysMA;
 
-@property (nonatomic) NSNumber *uuidI,
-                               *boardI,
-                               *connectorCountI,
-                               *connectorSelectionI,
-                               *brandI,
-                               *pinCountI;
+@property (nonatomic) NSNumber *uuidN,
+                               *boardN,
+                               *connectorCountN,
+                               *connectorSelectionN,
+                               *connectorTypeN;
 
 @property (nonatomic) NSInteger counter;
 
-@property (strong, nonatomic) UISegmentedControl *connectorCountSC,
-                                                 *brandSC,
-                                                 *pinCountSC;
+@property (strong, nonatomic) UISegmentedControl *connectorCountSC;
 
 @property (strong, nonatomic) UIAlertView *noNewSwitchAV,
                                           *createdSwitchAV;
@@ -55,23 +51,19 @@
 {
  if (sender == self.doneB)
     {
-    PFObject *obj = (PFObject *)self.connectorsMA[self.connectorSelectionI.integerValue];   //  get the connector we just finished entering info for
+    [self.connectorsMA addObject:@{@"objectId" : ((PFObject *)self.connectorTypeA[self.connectorTypeN.integerValue]).objectId, @"relays" : [self.relaysMA mutableCopy]}];
     
-    obj[@"brand"]    = self.brandMA[self.brandI.integerValue];
-    obj[@"pinCount"] = self.pinCountA[self.pinCountI.integerValue];
-    obj[@"relays"]   = self.relaysMA[self.connectorSelectionI.integerValue];
-    
-    [self.brandSC    setSelectedSegmentIndex:UISegmentedControlNoSegment];
-    [self.pinCountSC setSelectedSegmentIndex:UISegmentedControlNoSegment];
+    [self.relaysMA removeAllObjects];
+    self.connectorTypeN = nil;
     
     [self.switchTV reloadData];
     
-    if (self.connectorSelectionI == self.connectorCountI) [self saveConnectorsToParse];
+    if (self.connectorSelectionN == self.connectorCountN) [self saveSwitchDataToParse];  // we've finished entering data for all of the connectors, so save the switch data
     else
        {
-       self.connectorSelectionI = [NSNumber numberWithInteger:self.connectorSelectionI.integerValue + 1];
+       self.connectorSelectionN = [NSNumber numberWithInteger:self.connectorSelectionN.integerValue + 1];
        
-       if (self.connectorCountI == self.connectorSelectionI) [self.doneB setTitle:@"Done" forState:UIControlStateNormal];  // if we have begun the last connector, change the title to Done
+       if (self.connectorCountN == self.connectorSelectionN) [self.doneB setTitle:@"Done" forState:UIControlStateNormal];  // if we have begun the last connector, change the title to Done
        }
     }
 }
@@ -79,7 +71,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
- return 6;
+ return 5;
 }
 
 
@@ -91,11 +83,9 @@
  else
  if (section == 2) return @"Connector Count";
  else
- if (section == 3) return [NSString stringWithFormat:@"Connector %i Brand", self.connectorSelectionI.intValue + 1];
+ if (section == 3) return [NSString stringWithFormat:@"Connector %i Type", self.connectorSelectionN.intValue + 1];
  else
- if (section == 4) return [NSString stringWithFormat:@"Connector %i Pin Count", self.connectorSelectionI.intValue + 1];
- else
- if (section == 5) return [NSString stringWithFormat:@"Connector %i Relay Use", self.connectorSelectionI.intValue + 1];
+ if (section == 4) return [NSString stringWithFormat:@"Connector %i Relay Use", self.connectorSelectionN.intValue + 1];
  else              return @"";
 }
 
@@ -108,11 +98,9 @@
  else
  if (section == 2) return 1;  // connector count
  else
- if (section == 3) return 1;  // connector brand
+ if (section == 3) return self.connectorTypeA.count;  // connector type
  else
- if (section == 4) return 1;  // connector pin count
- else
- if (section == 5) return 4;  // connector relay use
+ if (section == 4) return self.relayDisplayA.count;  // connector relay use
  else              return 0;
 }
 
@@ -127,14 +115,14 @@
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", per.name, per.identifier.UUIDString];
     
-    if (self.uuidI && (indexPath.row == self.uuidI.integerValue)) [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    if (self.uuidN && (indexPath.row == self.uuidN.integerValue)) [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
  else
  if (indexPath.section == 1)   //  board
     {
     cell.textLabel.text = ((PFObject *)self.boardA[indexPath.row])[@"name"];
     
-    if (self.boardI && (indexPath.row == self.boardI.integerValue)) [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    if (self.boardN && (indexPath.row == self.boardN.integerValue)) [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
  else
  if (indexPath.section == 2)   //  connector count
@@ -143,20 +131,15 @@
     self.connectorCountSC.frame = cell.frame;
     }
  else
- if (indexPath.section == 3)   // connector brand
+ if (indexPath.section == 3)   // connector type
     {
-    [cell.contentView addSubview:self.brandSC];
-    self.brandSC.frame = cell.frame;
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ pin", self.connectorTypeA[indexPath.row][@"brand"], ((NSNumber *)self.connectorTypeA[indexPath.row][@"pinCount"]).stringValue];
+    
+    if (self.connectorTypeN && (indexPath.row == self.connectorTypeN.integerValue)) [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
- else
- if (indexPath.section == 4)   // connector pin count
+ if (indexPath.section == 4)   // connector relay use
     {
-    [cell.contentView addSubview:self.pinCountSC];
-    self.pinCountSC.frame = cell.frame;
-    }
- if (indexPath.section == 5)   // connector relay use
-    {
-    cell.textLabel.text = [NSString stringWithFormat:@"%li", indexPath.row + 1];
+    cell.textLabel.text = self.relayDisplayA[indexPath.row];
     }
 
  return cell;
@@ -171,38 +154,49 @@ UITableViewCell *cell;
  
  if (indexPath.section == 0)   //  UUID
     {
-    if (self.uuidI) [[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.uuidI.integerValue inSection:indexPath.section]] setAccessoryType:UITableViewCellAccessoryNone];   // set the previously selected row to none
+    if (self.uuidN) [[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.uuidN.integerValue inSection:indexPath.section]] setAccessoryType:UITableViewCellAccessoryNone];   // set the previously selected row to none
     
-    self.uuidI = [NSNumber numberWithInteger:indexPath.row];
+    self.uuidN = [NSNumber numberWithInteger:indexPath.row];
     
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
  else
  if (indexPath.section == 1)   //  Board
     {
-    if (self.boardI) [[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.boardI.integerValue inSection:indexPath.section]] setAccessoryType:UITableViewCellAccessoryNone];   // set the previously selected row to none
+    if (self.boardN) [[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.boardN.integerValue inSection:indexPath.section]] setAccessoryType:UITableViewCellAccessoryNone];   // set the previously selected row to none
     
-    self.boardI = [NSNumber numberWithInteger:indexPath.row];
+    self.boardN = [NSNumber numberWithInteger:indexPath.row];
+    
+    [self buildRelayDisplayA];
     
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
  else
- if (indexPath.section == 5)   //  Relays
+ if (indexPath.section == 3)   //  Connector type
+    {
+    if (self.connectorTypeN) [[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.connectorTypeN.integerValue inSection:indexPath.section]] setAccessoryType:UITableViewCellAccessoryNone];   // set the previously selected row to none
+    
+    self.connectorTypeN = [NSNumber numberWithInteger:indexPath.row];
+    
+    [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    }
+ else
+ if (indexPath.section == 4)   //  Relays
     {
     if (cell.accessoryType == UITableViewCellAccessoryCheckmark)
        {
        [cell setAccessoryType:UITableViewCellAccessoryNone];
        
-       for (int i = 0; i < ((NSMutableArray *)self.relaysMA[self.connectorSelectionI.integerValue]).count; i++)
+       for (int i = 0; i < ((NSMutableArray *)self.relaysMA[self.connectorSelectionN.integerValue]).count; i++)
           {
-          if ([(NSNumber *)self.relaysMA[self.connectorSelectionI.integerValue][i] isEqualToNumber:[NSNumber numberWithInteger:indexPath.row + 1]])   //  remove the correct number from the array
-             [self.relaysMA[self.connectorSelectionI.integerValue] removeObjectAtIndex:i];
+          if ([(NSNumber *)self.relaysMA[self.connectorSelectionN.integerValue][i] isEqualToNumber:[NSNumber numberWithInteger:indexPath.row + 1]])   //  remove the correct number from the array
+             [self.relaysMA[self.connectorSelectionN.integerValue] removeObjectAtIndex:i];
           }
        }
     else
        {    // set checkmark and add to array
        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-       [self.relaysMA[self.connectorSelectionI.integerValue] addObject:[NSNumber numberWithInteger:indexPath.row + 1]];
+       [self.relaysMA addObject:[NSNumber numberWithInteger:indexPath.row + 1]];
        }
     }
 }
@@ -210,58 +204,22 @@ UITableViewCell *cell;
 
 - (void)connectorCount:(id)sender  // user selected the count of connectors
 {
- self.connectorCountI = [NSNumber numberWithInteger:self.connectorCountSC.selectedSegmentIndex];
+ self.connectorCountN = [NSNumber numberWithInteger:self.connectorCountSC.selectedSegmentIndex];
  
- [self createConnectorDicts];
+ [self.switchTV reloadData];
 }
 
 
-- (void)brandSelection:(id)sender   //  user selected the brand of the connector
+- (void)buildRelayDisplayA
 {
- self.brandI = [NSNumber numberWithInteger:self.brandSC.selectedSegmentIndex];
-}
-
-
-- (void)pinCountSelection:(id)sender   //  user selected the brand of the connector
-{
- self.pinCountI = [NSNumber numberWithInteger:self.pinCountSC.selectedSegmentIndex];
-}
-
-
-- (void)createConnectorDicts
-{
- self.connectorsMA = NSMutableArray.new;
+ NSMutableArray *ary = NSMutableArray.new;
  
- for (int i = -1; i < self.connectorCountI.integerValue; i++)   // self.connectorCountI is zero relative, so i needs to start at -1
-    {
-    PFObject *connector = [PFObject objectWithClassName:@"SwitchConnector"];   // create the connector objects
-    [self.connectorsMA addObject:connector];
-    
-    NSMutableArray *mA = NSMutableArray.new;
-    [self.relaysMA addObject:mA];
-    }
-}
-
-
-- (void)saveConnectorsToParse
-{
- [PFObject saveAllInBackground:self.connectorsMA block:^(BOOL succeeded, NSError *error)
-    {
-    if (succeeded)
-       {
-       for (PFObject *connector in self.connectorsMA)
-          {
-          NSLog(@"New connector object id: %@", connector.objectId);
-          }
-       
-       [self saveSwitchDataToParse];
-       }
-    else
-       {
-       NSLog(@"Error: %@ %@", error, [error userInfo]);
-       }
-    }
- ];
+ for (int i = 0; i < ((NSNumber *)self.boardA[self.boardN.integerValue][@"relayCount"]).integerValue; i++)
+     [ary addObject:[NSString stringWithFormat:@"%i", i + 1]];
+ 
+ self.relayDisplayA = ary;
+ 
+ [self.switchTV reloadData];
 }
 
 
@@ -270,8 +228,8 @@ UITableViewCell *cell;
  PFObject *wirelessSwitch = [PFObject objectWithClassName:@"WirelessSwitch"];
  
  wirelessSwitch[@"isSetup"]    = [NSNumber numberWithBool:NO];
- wirelessSwitch[@"uuid"]       = ((CBPeripheral *)self.peripheralMA[self.uuidI.integerValue]).identifier.UUIDString;
- wirelessSwitch[@"board"]      = (PFObject *)self.boardA[self.boardI.integerValue];
+ wirelessSwitch[@"uuid"]       = ((CBPeripheral *)self.peripheralMA[self.uuidN.integerValue]).identifier.UUIDString;
+ wirelessSwitch[@"board"]      = (PFObject *)self.boardA[self.boardN.integerValue];
  wirelessSwitch[@"connectors"] = self.connectorsMA;
  
  [wirelessSwitch saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
@@ -301,7 +259,12 @@ UITableViewCell *cell;
     if (buttonIndex == 1) [self performSegueWithIdentifier:@"unwindToHomeFromCreateSwitch" sender:self];
     }
  else
- if (alertView == self.noNewSwitchAV) [self resetForNewSwitch];
+ if (alertView == self.noNewSwitchAV)
+    {
+    if (buttonIndex == 0) [self resetForNewSwitch];
+    else
+    if (buttonIndex == 1) [self performSegueWithIdentifier:@"unwindToHomeFromCreateSwitch" sender:self];
+    }
 }
 
 
@@ -312,10 +275,10 @@ UITableViewCell *cell;
  [self.switchTV scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
  self.switchTV.userInteractionEnabled = NO;
 
- self.uuidI  = nil;
- self.boardI = nil;
- self.connectorCountI = nil;
- self.connectorSelectionI = nil;
+ self.uuidN  = nil;
+ self.boardN = nil;
+ self.connectorCountN = nil;
+ self.connectorSelectionN = nil;
  
  [self.peripheralMA removeAllObjects];
  [self.connectorsMA removeAllObjects];
@@ -346,19 +309,15 @@ UITableViewCell *cell;
  self.switchTV.userInteractionEnabled = NO;
  
  [self lookupBoards];
- [self lookupConnectorBrands];
+ [self lookupConnectors];
  
  self.connectorCountSC = [[UISegmentedControl alloc] initWithItems:@[@"1", @"2", @"3", @"4"]];
  [self.connectorCountSC addTarget:self action:@selector(connectorCount:) forControlEvents:UIControlEventValueChanged];
  
- self.connectorSelectionI = 0;
- 
- self.pinCountDisplayA = @[@"2", @"3"];
- self.pinCountA = @[[NSNumber numberWithInteger:2], [NSNumber numberWithInteger:3]];
- self.pinCountSC = [[UISegmentedControl alloc] initWithItems:self.pinCountDisplayA];
- [self.pinCountSC addTarget:self action:@selector(pinCountSelection:) forControlEvents:UIControlEventValueChanged];
+ self.connectorSelectionN = 0;
  
  self.relaysMA = NSMutableArray.new;
+ self.connectorsMA = NSMutableArray.new;
 }
 
 
@@ -377,21 +336,17 @@ UITableViewCell *cell;
 }
 
 
-- (void)lookupConnectorBrands
+- (void)lookupConnectors
 {
- PFQuery *query = [PFQuery queryWithClassName:@"SwitchConnectorBrand"];
+ PFQuery *query = [PFQuery queryWithClassName:@"Connector"];
  
  [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
     {
     if (!error)
        {
-       self.brandMA = NSMutableArray.new;
-       for (PFObject *object in objects) [self.brandMA addObject:object[@"brand"]];
+       self.connectorTypeA = objects;
        }
     else NSLog(@"Error: %@ %@", error, [error userInfo]);
-    
-    self.brandSC = [[UISegmentedControl alloc] initWithItems:self.brandMA];
-    [self.brandSC addTarget:self action:@selector(brandSelection:) forControlEvents:UIControlEventValueChanged];   // create segmented controller for brands
     
     [self buildTable];
     }
@@ -450,7 +405,7 @@ NSMutableArray *mA;
     if (!error)
        {
        NSLog(@"Switch already exists");
-       self.noNewSwitchAV = [[UIAlertView alloc] initWithTitle:@"Fail" message:@"Did not find a new switch." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Try again", nil];
+       self.noNewSwitchAV = [[UIAlertView alloc] initWithTitle:@"Fail" message:@"Did not find a new switch." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Try again", @"Cancel", nil];
        [self.noNewSwitchAV show];
        }
     else
@@ -473,7 +428,7 @@ NSMutableArray *mA;
  
  [self.scanningAI stopAnimating];
  
-  self.switchTV.userInteractionEnabled = YES;
+ self.switchTV.userInteractionEnabled = YES;
 }
 
 

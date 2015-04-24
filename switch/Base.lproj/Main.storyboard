@@ -140,12 +140,14 @@
                                     <action selector="buttonPress:" destination="8Lj-db-Qgp" eventType="touchUpInside" id="48h-Cu-m1t"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="jvz-N2-7EF">
-                                <rect key="frame" x="282" y="31" width="37" height="37"/>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="jvz-N2-7EF">
+                                <rect key="frame" x="290" y="40" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="jvz-N2-7EF" firstAttribute="centerX" secondItem="ea2-ij-Bu5" secondAttribute="centerX" id="1zU-yT-9Ok"/>
+                            <constraint firstItem="jvz-N2-7EF" firstAttribute="centerY" secondItem="pr6-p4-ujm" secondAttribute="centerY" id="4S7-c3-c3s"/>
                             <constraint firstItem="ea2-ij-Bu5" firstAttribute="bottom" secondItem="aKh-le-hQe" secondAttribute="top" id="53y-wL-p0D"/>
                             <constraint firstItem="ELk-ry-erT" firstAttribute="baseline" secondItem="pr6-p4-ujm" secondAttribute="firstBaseline" id="Akn-bd-uGF"/>
                             <constraint firstItem="ea2-ij-Bu5" firstAttribute="leading" secondItem="d2j-On-7p7" secondAttribute="leading" id="ILv-z9-ezQ"/>
