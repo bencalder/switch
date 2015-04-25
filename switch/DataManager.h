@@ -15,6 +15,11 @@
 
 @property (nonatomic, strong) PFObject *freshSwitchPFO;
 
+@property (nonatomic, strong) PFObject *selectedSwitchPFO;
+
+@property (nonatomic, strong) NSArray *functions,
+                                      *serialCommands;
+
 + (id)sharedDataManager;
 
 @end

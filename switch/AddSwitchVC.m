@@ -49,7 +49,6 @@
 - (IBAction)unwindFromNameSwitch:(UIStoryboardSegue *)sender
 {
  NSLog(@"Unwind from NameSwitchVC");
-    // Pull any data from the view controller which initiated the unwind segue.
 }
 
 
@@ -147,7 +146,7 @@
         
        self.searchingL.text = [NSString stringWithFormat:@"Found %lu switches.", (unsigned long)self.switchMA.count];
        
-       self.addSwitchB.hidden = NO;
+       if (self.switchMA.count > 0) self.addSwitchB.hidden = NO;
        }
     else
        {
@@ -180,6 +179,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
  [super viewDidAppear:animated];
+ 
+ [self scanForPeripherals];
  
  [self.searchingAI startAnimating];
 }

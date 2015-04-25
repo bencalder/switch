@@ -1,3 +1,4 @@
+
 //
 //  SummaryVC.m
 //  switch
@@ -47,21 +48,21 @@
        
        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
        
-       if (![defaults objectForKey:@"switchArray"])
+       if ([defaults objectForKey:@"switchArray"] == nil)
           {
           NSMutableArray *switchMA;
     
-          switchMA = NSMutableArray.new;
+           switchMA = NSMutableArray.new;
     
-          [switchMA addObject:self.sharedData.freshSwitchPFO.objectId];
+           [switchMA addObject:self.sharedData.freshSwitchPFO.objectId];
     
-          [defaults setObject:switchMA forKey:@"switchArray"];
+           [defaults setObject:switchMA forKey:@"switchArray"];
           }
        else [(NSMutableArray *)[defaults objectForKey:@"switchArray"] addObject:self.sharedData.freshSwitchPFO.objectId];
        
        [defaults synchronize];
        
-//       [self.navigationController popToRootViewControllerAnimated:YES];
+       [self performSegueWithIdentifier:@"unwindtohome" sender:self];
        }
     else NSLog(@"Error: %@ %@", error, [error userInfo]);
     }
@@ -69,7 +70,7 @@
 }
 
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
  return self.summaryMA.count;
 }

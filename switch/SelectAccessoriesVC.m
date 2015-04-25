@@ -43,9 +43,10 @@
     {
     for (int i = 0; i < self.totalConnectorsI; i++)
        {
-       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i]).objectId forKey:@"accessoryId"];
-       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i])[@"brand"] forKey:@"accessoryBrand"];
-       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i])[@"model"] forKey:@"accessoryModel"];
+       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i]).objectId      forKey:@"accessoryId"];
+       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i])[@"brand"]     forKey:@"accessoryBrand"];
+       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i])[@"model"]     forKey:@"accessoryModel"];
+       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i])[@"functions"] forKey:@"accessoryFunctions"];
        }
     }
 }
@@ -65,14 +66,14 @@
 }
 
 
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
  if (self.accordionOpen) return self.accessoriesA[section][0][@"brand"];
  else                    return nil;
 }
 
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
  if (self.accordionOpen) return ((NSArray *)self.accessoriesA[section]).count;
  else return self.totalConnectorsI;
@@ -122,7 +123,7 @@
 }
 
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 UITableViewCell *cell;
 

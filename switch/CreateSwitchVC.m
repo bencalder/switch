@@ -314,10 +314,18 @@ UITableViewCell *cell;
  self.connectorCountSC = [[UISegmentedControl alloc] initWithItems:@[@"1", @"2", @"3", @"4"]];
  [self.connectorCountSC addTarget:self action:@selector(connectorCount:) forControlEvents:UIControlEventValueChanged];
  
- self.connectorSelectionN = 0;
+ self.connectorSelectionN = [NSNumber numberWithInteger:0];
  
  self.relaysMA = NSMutableArray.new;
  self.connectorsMA = NSMutableArray.new;
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+ [super viewDidAppear:animated];
+ 
+ [self scanForPeripherals];
 }
 
 

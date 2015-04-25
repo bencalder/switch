@@ -21,6 +21,7 @@
 - (void)setConnect;
 - (void)setDisconnect;
 - (void)scanForPeripherals;
+- (void)didConnect:(CBPeripheral *)peripheral;
 
 @end
 

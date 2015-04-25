@@ -101,6 +101,8 @@
  [self.activePeripheral discoverServices:nil];
     
  [self printPeripheralInfo:peripheral];
+ 
+ [delegate didConnect:peripheral];
     
  NSLog(@"Connected to the peripheral");
 }
@@ -239,7 +241,7 @@
 {
  switch(centralManager.state)
     {
-    case CBCentralManagerStatePoweredOn    : [self.delegate scanForPeripherals];
+    case CBCentralManagerStatePoweredOn    : //[self.delegate scanForPeripherals];
          break;
     case CBCentralManagerStatePoweredOff   :
          break;
