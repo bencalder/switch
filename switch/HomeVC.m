@@ -15,18 +15,23 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *switchTV;
 
-@property (strong, nonatomic) NSArray *switchIdA,
-                                      *switchA,
-                                      *functionsA;
+@property (strong, nonatomic) NSArray *switchA,
+                                      *functionsA,
+                                      *switchDataA,
+                                      *retrievedPeripheralsA;
 
 @property (strong, nonatomic) NSMutableArray *switchAccessoriesMA,
-                                             *btPeripherals;
+                                             *btPeripheralsMA,
+                                             *switchObjectIdMA,
+                                             *switchUUIDMA;
 
 @property (nonatomic) NSInteger counter;
 
 @property (strong, nonatomic) NSIndexPath *selectedAccessoryIP;
 
 @property (strong, nonatomic) DataManager *sharedData;
+
+@property (strong, nonatomic) UIRefreshControl *switchRC;
 
 @end
 
@@ -58,6 +63,12 @@
 }
 
 
+- (IBAction)unwindFromWrite:(UIStoryboardSegue *)sender
+{
+ NSLog(@"Unwind from WriteVC");
+}
+
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
  return 1;
@@ -74,16 +85,19 @@
 {
 UITableViewCell *cell;
 NSDictionary *switchD;
+NSUUID *uuid;
  
  cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"subtitle"];
  
  switchD = self.switchA[indexPath.row];
  
+ uuid = self.switchUUIDMA[indexPath.row];
+ 
  cell.textLabel.text = switchD[@"name"];
  
- for (CBPeripheral *bt in self.btPeripherals)
+ for (CBPeripheral *bt in self.btPeripheralsMA)
     {
-    if ([bt.identifier.UUIDString isEqualToString:switchD[@"uuid"]])  //  found bluetooth device that matches a known switch
+    if ([bt.identifier.UUIDString isEqualToString:uuid.UUIDString])  //  found bluetooth device that matches a known switch
        {
        cell.detailTextLabel.text = @"AVAILABLE";
        break;
@@ -98,19 +112,21 @@ NSDictionary *switchD;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 CBPeripheral *selected;
+NSUUID *uuid;
 
  self.sharedData.selectedSwitchPFO = self.switchA[indexPath.row];
  
- for (CBPeripheral *bt in self.btPeripherals)
+ uuid = self.switchUUIDMA[indexPath.row];
+ 
+ for (CBPeripheral *bt in self.btPeripheralsMA)
     {
-    if ([bt.identifier.UUIDString isEqualToString:self.sharedData.selectedSwitchPFO[@"uuid"]])
+    if ([bt.identifier.UUIDString isEqualToString:uuid.UUIDString])
        {
        selected = bt;
+       [self.btComm connect:selected];
        break;
        }
     }
-
- [self.btComm connect:selected];
 }
 
 
@@ -128,6 +144,19 @@ CBPeripheral *selected;
 }
 
 
+- (void)didDiscoverServices:(CBPeripheral *)peripheral
+{
+ NSLog(@"Discovered services on peripheral: %@", peripheral);
+}
+
+
+- (void)didDisconnect:(CBPeripheral *)peripheral
+{
+ NSLog(@"Disconnected from peripheral: %@", peripheral);
+
+}
+
+
 - (void)viewDidLoad
 {
  [super viewDidLoad];
@@ -137,6 +166,11 @@ CBPeripheral *selected;
  self.btComm.delegate = self;
  
  self.sharedData = [DataManager sharedDataManager];
+ self.sharedData.btComm = self.btComm;
+ 
+ self.switchRC = UIRefreshControl.new;
+ [self.switchRC addTarget:self action:@selector(scanForPeripherals) forControlEvents:UIControlEventValueChanged];
+ [self.switchTV addSubview:self.switchRC];
 }
 
 
@@ -163,9 +197,11 @@ CBPeripheral *selected;
     {
     self.btComm.peripherals = nil;
     }
-    
- self.btComm.delegate = self;
+ 
+ self.btPeripheralsMA = NSMutableArray.new;
+ 
  NSLog(@"Scanning");
+ 
  [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(scanTimer:) userInfo:nil repeats:NO];
     
  [self.btComm findPeripheralsWithTimeout:2];
@@ -180,7 +216,11 @@ CBPeripheral *selected;
 
 - (void)peripheralFound:(CBPeripheral *)peripheral
 {
- [self.btPeripherals addObject:peripheral];
+ [self.switchRC endRefreshing];
+ 
+ NSLog(@"Found peripheral with UUID: %@", peripheral.identifier.UUIDString);
+
+ [self.btPeripheralsMA addObject:peripheral];
 
  [self.switchTV reloadData];
 }
@@ -190,9 +230,20 @@ CBPeripheral *selected;
 {
  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
  
- if ((self.switchIdA = [defaults objectForKey:@"switchArray"]) != nil)  // if switch data is already saved on phone
+ if ((self.switchDataA = [defaults objectForKey:@"switchArray"]) != nil)  // if switch data is already saved on phone
     {
     self.counter = 0;
+    
+    self.switchObjectIdMA = NSMutableArray.new;
+    self.switchUUIDMA     = NSMutableArray.new;
+    
+    for (NSDictionary *d in self.switchDataA)
+       {
+       [self.switchObjectIdMA addObject:d[@"objectId"]];
+       [self.switchUUIDMA     addObject:[[NSUUID alloc] initWithUUIDString:d[@"uuid"]]];
+       }
+ 
+    self.retrievedPeripheralsA = [self.btComm.manager retrievePeripheralsWithIdentifiers:self.switchUUIDMA];
     
     [self lookupSwitchData];
     [self lookupFunctions];
@@ -205,7 +256,7 @@ CBPeripheral *selected;
 {
  PFQuery *query = [PFQuery queryWithClassName:@"WirelessSwitch"];
  
- [query whereKey:@"objectId" containedIn:self.switchIdA];
+ [query whereKey:@"objectId" containedIn:self.switchObjectIdMA];
  
  [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
     {
@@ -262,8 +313,6 @@ CBPeripheral *selected;
  self.counter++;
  
  if (self.counter < 3) return;
- 
- self.btPeripherals = NSMutableArray.new;
 
  [self scanForPeripherals];
  

@@ -16,22 +16,16 @@
 
 @implementation BluetoothComm
 
-@synthesize delegate;
-@synthesize peripherals;
-@synthesize manager;
-@synthesize activePeripheral;
-
-
 
 - (void)setup   // enable CoreBluetooth CentralManager and set the delegate for SerialGATT
 {
- manager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+ self.manager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
 }
 
 
 - (void)findPeripheralsWithTimeout:(int)timeout
 {
- if ([manager state] != CBCentralManagerStatePoweredOn)
+ if ([self.manager state] != CBCentralManagerStatePoweredOn)
     {
     NSLog(@"CoreBluetooth is not correctly initialized!");
     return;
@@ -39,7 +33,7 @@
     
  [NSTimer scheduledTimerWithTimeInterval:(float)timeout target:self selector:@selector(scanTimer:) userInfo:nil repeats:NO];
  
- [manager scanForPeripheralsWithServices:nil options:0];   //  BENBEN service 0xFFE0
+ [self.manager scanForPeripheralsWithServices:[NSArray arrayWithObject:[CBUUID UUIDWithString:@"0xFFE0"]] options:0];
  
  return;
 }
@@ -81,7 +75,7 @@
       
  NSLog(@"Peripheral added to array");
  [self.peripherals addObject:peripheral];
- [delegate peripheralFound:peripheral];
+ [self.delegate peripheralFound:peripheral];
     
  return;
 }
@@ -89,7 +83,7 @@
 
 - (void)connect:(CBPeripheral *)peripheral   // connect to a given peripheral
 {
- if (!(peripheral.state == CBPeripheralStateConnected)) [manager connectPeripheral:peripheral options:nil];
+ if (!(peripheral.state == CBPeripheralStateConnected)) [self.manager connectPeripheral:peripheral options:nil];
 }
 
 
@@ -97,12 +91,12 @@
 {
  self.activePeripheral = peripheral;
  self.activePeripheral.delegate = self;
-    
- [self.activePeripheral discoverServices:nil];
-    
+ 
  [self printPeripheralInfo:peripheral];
  
- [delegate didConnect:peripheral];
+ [self.activePeripheral discoverServices:nil];
+ 
+ [self.delegate didConnect:peripheral];
     
  NSLog(@"Connected to the peripheral");
 }
@@ -115,6 +109,8 @@
     NSLog(@"Services found of peripheral with UUID : %@", peripheral.identifier.UUIDString);
     NSLog(@"Services are %@", peripheral.services);
     
+    [self.delegate didDiscoverServices:peripheral];
+    
     [peripheral discoverCharacteristics:nil forService:peripheral.services[0]];
     }
  else NSLog(@"Service discovery was unsuccessfull");
@@ -126,7 +122,11 @@
  if (!error)
     {
     NSLog(@"Characteristics of service: %@", service.characteristics);
-    NSLog(@"Descriptor of characteristic 0: %@", ((CBCharacteristic *)service.characteristics[0]).descriptors);
+    
+    for (CBCharacteristic *charac in service.characteristics)
+       {
+       NSLog(@"Descriptor of characteristic: %@", charac.descriptors);
+       }
      
     for (int i = 0; i < service.characteristics.count; i++)
         { //Show every one
@@ -142,8 +142,8 @@
     //CBService *s = [peripheral.services objectAtIndex:(peripheral.services.count - 1)];
     if ([self compareCBUUID:service.UUID UUID2:uuid])
        {
-       NSLog(@"Try to open notify");
-       [self notify:peripheral on:YES];
+//       NSLog(@"Try to open notify");
+//       [self notify:peripheral on:YES];
        }
     }
  else NSLog(@"Characteristic discovery unsuccessfull");
@@ -176,7 +176,6 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    
  if (!error) NSLog(@"Updated value for characteristic: %@", characteristic);
  else NSLog(@"Error: %@", error);
 }
@@ -203,19 +202,19 @@
 
 - (void)scanTimer:(NSTimer *)timer  // stops scanning after a specified time
 {
- [manager stopScan];
+ [self.manager stopScan];
 }
 
 
 - (void)stopScan
 {
- [manager stopScan];
+ [self.manager stopScan];
 }
 
 
 - (void)disconnect:(CBPeripheral *)peripheral   // disconnect from a given peripheral
 {
- [manager cancelPeripheralConnection:peripheral];
+ [self.manager cancelPeripheralConnection:peripheral];
 }
 
 
@@ -261,10 +260,10 @@
 {
  NSLog(@"Disconnected from the active peripheral");
  
- if (activePeripheral != nil)
+ if (self.activePeripheral != nil)
     {
-    [delegate setDisconnect];
-    activePeripheral = nil;
+    [self.delegate didDisconnect:peripheral];
+    self.activePeripheral = nil;
     }
 }
 
@@ -311,7 +310,7 @@
  if (!error)
     {
     NSLog(@"Updated notification state for characteristic with UUID %s on service with  UUID %s on peripheral with UUID %s\r\n", [self CBUUIDToString:characteristic.UUID], [self CBUUIDToString:characteristic.service.UUID], [self UUIDToString:(__bridge CFUUIDRef )peripheral.identifier]);
-    [delegate setConnect];
+    [self.delegate setConnect];
     }
  else
     {

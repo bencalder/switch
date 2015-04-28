@@ -228,7 +228,7 @@ UITableViewCell *cell;
  PFObject *wirelessSwitch = [PFObject objectWithClassName:@"WirelessSwitch"];
  
  wirelessSwitch[@"isSetup"]    = [NSNumber numberWithBool:NO];
- wirelessSwitch[@"uuid"]       = ((CBPeripheral *)self.peripheralMA[self.uuidN.integerValue]).identifier.UUIDString;
+// wirelessSwitch[@"uuid"]       = ((CBPeripheral *)self.peripheralMA[self.uuidN.integerValue]).identifier.UUIDString;
  wirelessSwitch[@"board"]      = (PFObject *)self.boardA[self.boardN.integerValue];
  wirelessSwitch[@"connectors"] = self.connectorsMA;
  

@@ -8,10 +8,13 @@
 
 #import "NameSwitchVC.h"
 #import "DataManager.h"
+#import <Parse/Parse.h>
 
 @interface NameSwitchVC () <UITextFieldDelegate>
 
+@property (weak, nonatomic) IBOutlet UITextField *codeTF;
 @property (weak, nonatomic) IBOutlet UITextField *nameTF;
+
 @property (weak, nonatomic) IBOutlet UIButton *backB;
 @property (weak, nonatomic) IBOutlet UIButton *doneB;
 
@@ -24,8 +27,36 @@
 
 - (IBAction)buttonPress:(id)sender
 {
- if (sender == self.doneB) self.sharedData.freshSwitchPFO[@"name"] = self.nameTF.text;
+ if (sender == self.doneB)
+    {
+    [self lookupSwitchCode];
+    }
+}
 
+
+- (void)saveAndMoveForward
+{
+ self.sharedData.freshSwitchPFO[@"name"] = self.nameTF.text;
+
+ [self performSegueWithIdentifier:@"nameswitchtoselect" sender:self];
+}
+
+
+- (void)lookupSwitchCode
+{
+ PFQuery *query = [PFQuery queryWithClassName:@"WirelessSwitch"];
+ [query whereKey:@"objectId" equalTo:self.codeTF.text];
+ [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error)
+    {
+    if (!error)
+       {
+       self.sharedData.freshSwitchPFO = object;
+       self.sharedData.freshSwitchPFO[@"uuid"] = self.sharedData.btComm.activePeripheral.identifier.UUIDString;
+       [self saveAndMoveForward];
+       }
+    else NSLog(@"Error: %@ %@", error, [error userInfo]);
+    }
+ ];
 }
 
 
@@ -36,6 +67,16 @@
 }
 
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+ if (textField == self.codeTF) [self.nameTF becomeFirstResponder];
+ else
+ if (textField == self.nameTF) [self buttonPress:self.doneB];
+ 
+ return YES;
+}
+
+
 - (void)viewDidLoad
 {
  [super viewDidLoad];
@@ -43,11 +84,12 @@
  self.sharedData = [DataManager sharedDataManager];
 }
 
+
 - (void)viewDidAppear:(BOOL)animated
 {
  [super viewDidAppear:animated];
  
- [self.nameTF becomeFirstResponder];
+ [self.codeTF becomeFirstResponder];
 }
 
 

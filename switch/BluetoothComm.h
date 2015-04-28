@@ -22,6 +22,8 @@
 - (void)setDisconnect;
 - (void)scanForPeripherals;
 - (void)didConnect:(CBPeripheral *)peripheral;
+- (void)didDisconnect:(CBPeripheral *)peripheral;
+- (void)didDiscoverServices:(CBPeripheral *)peripheral;
 
 @end
 

@@ -8,7 +8,6 @@
 
 #import "AddSwitchVC.h"
 #import "BluetoothComm.h"
-#import <Parse/Parse.h>
 #import "DataManager.h"
 
 @interface AddSwitchVC () <BTDelegate>
@@ -26,10 +25,11 @@
 
 @property (strong, nonatomic) BluetoothComm *btComm;
 
-@property (strong, nonatomic) NSMutableArray *uuidMA,
-                                             *switchMA;
+@property (strong, nonatomic) NSMutableArray *peripheralMA;
 
 @property (nonatomic) float searchingProgressF;
+
+@property (strong, nonatomic) DataManager *sharedData;
 
 @end
 
@@ -40,8 +40,7 @@
 {
  if (sender == self.addSwitchB)
     {
-    DataManager *sharedData = [DataManager sharedDataManager];
-    sharedData.freshSwitchPFO = self.switchMA[0];
+    
     }
 }
 
@@ -66,7 +65,6 @@
  if ([self.btComm peripherals])
     {
     self.btComm.peripherals = nil;
-//    [self.deviceTV reloadData];
     }
     
  self.btComm.delegate = self;
@@ -77,7 +75,7 @@
  self.searchingProgressF = 0.0;
  [self progress:nil];
  
- self.uuidMA = NSMutableArray.new;  // make new array to add UUID's to
+ self.peripheralMA = NSMutableArray.new;  // make new array to add UUID's to
  
  [self.btComm findPeripheralsWithTimeout:2];
 }
@@ -85,9 +83,10 @@
 
 - (void)scanTimer:(NSTimer *)timer   // show CV or prompt to plug in, buy, or scan again
 {
- if (self.uuidMA.count > 0)
+ if (self.peripheralMA.count > 0)
     {
-    [self lookupUUIDs];
+    self.searchingL.text  = @"Found your switch!";
+    self.addSwitchB.hidden = NO;
     }
  else  // Didn't find any Bluetooth devices
     {
@@ -101,7 +100,15 @@
 {
  NSLog(@"Found peripheral with UUID: %@", peripheral.identifier.UUIDString);
  
- [self.uuidMA addObject:peripheral.identifier.UUIDString];
+ [self.peripheralMA addObject:peripheral];
+ [self.btComm connect:peripheral];
+}
+
+
+- (void)didConnect:(CBPeripheral *)peripheral
+{
+ NSLog(@"Successfully connected to the new peripheral.");
+
 }
 
 
@@ -121,45 +128,6 @@
 }
 
 
-- (void)lookupUUIDs
-{
- PFQuery *query = [PFQuery queryWithClassName:@"WirelessSwitch"];
- 
- [query whereKey:@"uuid"    containedIn:self.uuidMA];
- [query whereKey:@"isSetup" equalTo:[NSNumber numberWithBool:NO]];
- [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-    {
-    if (!error)
-       {
-       [self.searchingAI stopAnimating];  // turn off spinner
-
-       NSLog(@"Successfully retrieved switch data.");
-       
-       self.switchMA = NSMutableArray.new;
-
-       for (PFObject *object in objects)
-          {
-          NSLog(@"Found switch with ID: %@", object.objectId);
-          
-          [self.switchMA addObject:object];    // Switch is available to be setup, so add to the array
-          }
-        
-       self.searchingL.text = [NSString stringWithFormat:@"Found %lu switches.", (unsigned long)self.switchMA.count];
-       
-       if (self.switchMA.count > 0) self.addSwitchB.hidden = NO;
-       }
-    else
-       {
-       NSLog(@"Error: %@ %@", error, [error userInfo]);
-       
-       self.searchingL.text = @"We couldn't find an Engage switch nearby. Make sure the switch's battery cables are securely attached to your battery terminals.";
-       [self showPlugInOrBuyView];
-       }
-    }
- ];
-}
-
-
 - (void)showPlugInOrBuyView
 {
  NSLog(@"Switch not found. User needs to plug in or buy.");
@@ -169,9 +137,10 @@
 - (void)viewDidLoad
 {
  [super viewDidLoad];
+ 
+ self.sharedData = [DataManager sharedDataManager];
 
- self.btComm = BluetoothComm.new;
- [self.btComm setup];
+ self.btComm = self.sharedData.btComm;
  self.btComm.delegate = self;
 }
 

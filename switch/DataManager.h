@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
+#import "BluetoothComm.h"
 
 @interface DataManager : NSObject
 
@@ -19,6 +20,8 @@
 
 @property (nonatomic, strong) NSArray *functions,
                                       *serialCommands;
+
+@property (nonatomic, strong) BluetoothComm *btComm;
 
 + (id)sharedDataManager;
 

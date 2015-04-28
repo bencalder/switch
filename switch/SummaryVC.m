@@ -48,19 +48,34 @@
        
        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
        
+       NSDictionary *d = @{@"uuid" : self.sharedData.btComm.activePeripheral.identifier.UUIDString, @"objectId" : self.sharedData.freshSwitchPFO.objectId};
+       
        if ([defaults objectForKey:@"switchArray"] == nil)
           {
           NSMutableArray *switchMA;
     
            switchMA = NSMutableArray.new;
     
-           [switchMA addObject:self.sharedData.freshSwitchPFO.objectId];
+           [switchMA addObject:d];
     
            [defaults setObject:switchMA forKey:@"switchArray"];
           }
-       else [(NSMutableArray *)[defaults objectForKey:@"switchArray"] addObject:self.sharedData.freshSwitchPFO.objectId];
+       else
+          {
+          NSMutableArray *mA;
+          
+          mA = NSMutableArray.new;
+          
+          for (NSDictionary *switchD in [defaults objectForKey:@"switchArray"]) [mA addObject:switchD];
+           
+          [mA addObject:d];
+          
+          [defaults setObject:mA forKey:@"switchArray"];
+          }
        
        [defaults synchronize];
+       
+       [self.sharedData.btComm disconnect:self.sharedData.btComm.activePeripheral];
        
        [self performSegueWithIdentifier:@"unwindtohome" sender:self];
        }
@@ -132,14 +147,17 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+//     Get the new view controller using [segue destinationViewController].
+//     Pass the selected object to the new view controller.
+ 
+
 }
-*/
+
 
 @end

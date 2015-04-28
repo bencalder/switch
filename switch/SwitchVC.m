@@ -42,6 +42,13 @@
 @implementation SwitchVC
 
 
+- (IBAction)buttonPress:(id)sender
+{
+ if (sender == self.disconnectB) [self.btComm disconnect:self.btComm.activePeripheral];
+
+}
+
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
  return self.accessoriesA.count;
@@ -145,7 +152,7 @@ NSString *str;
 
 - (void)sendSerialCommand:(NSString *)msg
 {
-[self.btComm.activePeripheral writeValue:[msg dataUsingEncoding:[NSString defaultCStringEncoding]] forCharacteristic:((CBService *)self.btComm.activePeripheral.services[0]).characteristics[0] type:CBCharacteristicWriteWithoutResponse];
+ [self.btComm.activePeripheral writeValue:[msg dataUsingEncoding:[NSString defaultCStringEncoding]] forCharacteristic:((CBService *)self.btComm.activePeripheral.services[0]).characteristics[0] type:CBCharacteristicWriteWithoutResponse];
 
 }
 
