@@ -109,7 +109,7 @@ NSDictionary *connectorD;
     {
     connectorD = self.summaryMA[section];
     
-    return [NSString stringWithFormat:@"Connector %li", section];
+    return [NSString stringWithFormat:@"Connector %li", (long)section];
     }
  else return @"Switch name";
 }

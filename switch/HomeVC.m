@@ -106,6 +106,7 @@ NSUUID *uuid;
  uuid = self.switchUUIDMA[indexPath.row];
  
  cell.textLabel.text = switchD[@"name"];
+ cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:25.0];
  
  cell.detailTextLabel.text = @"DEVICE NOT FOUND";
  
