@@ -10,8 +10,9 @@
 #import "SummaryVC.h"
 #import <Parse/Parse.h>
 #import "DataManager.h"
+#import "BluetoothComm.h"
 
-@interface SummaryVC () <UITableViewDataSource, UITableViewDelegate>
+@interface SummaryVC () <UITableViewDataSource, UITableViewDelegate, BTDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *backB;
 @property (weak, nonatomic) IBOutlet UIButton *doneB;
@@ -21,6 +22,8 @@
 @property (strong, nonatomic) NSMutableArray *summaryMA;
 
 @property (strong, nonatomic) DataManager *sharedData;
+
+@property (strong, nonatomic) BluetoothComm *btComm;
 
 @end
 
@@ -85,9 +88,36 @@
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (void)didDisconnect:(CBPeripheral *)peripheral
+{
+ NSLog(@"Disconnected peripheral in SummaryVC: %@", peripheral);
+
+}
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
  return self.summaryMA.count;
+}
+
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+NSDictionary *connectorD;
+ 
+ if (section > 0)
+    {
+    connectorD = self.summaryMA[section];
+    
+    return [NSString stringWithFormat:@"Connector %li", section];
+    }
+ else return @"Switch name";
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+ return 1;
 }
 
 
@@ -98,13 +128,13 @@
  
  cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"default"];
  
- if (indexPath.row > 0)
+ if (indexPath.section > 0)
     {
-    connectorD = self.summaryMA[indexPath.row];
+    connectorD = self.summaryMA[indexPath.section];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"Connector %li: %@ %@", indexPath.row, connectorD[@"brand"], connectorD[@"model"]];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", connectorD[@"brand"], connectorD[@"model"]];
     }
- else cell.textLabel.text = [NSString stringWithFormat:@"Switch name: %@", self.summaryMA[indexPath.row]];
+ else cell.textLabel.text = [NSString stringWithFormat:@"%@", self.summaryMA[indexPath.row]];
  
  return cell;
 }
@@ -115,6 +145,9 @@
  [super viewDidLoad];
  
  self.sharedData = [DataManager sharedDataManager];
+ 
+ self.btComm = self.sharedData.btComm;
+ self.btComm.delegate = self;
  
  self.summaryMA = NSMutableArray.new;
  

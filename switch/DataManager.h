@@ -18,8 +18,10 @@
 
 @property (nonatomic, strong) PFObject *selectedSwitchPFO;
 
-@property (nonatomic, strong) NSArray *functions,
-                                      *serialCommands;
+@property (nonatomic, strong) NSArray *functions,      //  downloaded data from Parse
+                                      *serialCommands,
+                                      *accessories,
+                                      *connectors;
 
 @property (nonatomic, strong) BluetoothComm *btComm;
 

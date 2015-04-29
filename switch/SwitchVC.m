@@ -10,6 +10,7 @@
 #import "DataManager.h"
 #import "HomeVC.h"
 #import <Parse/Parse.h>
+#import "SwitchEditVC.h"
 
 
 @interface SwitchVC () < UITableViewDataSource, UITableViewDelegate, BTDelegate>
@@ -45,7 +46,12 @@
 - (IBAction)buttonPress:(id)sender
 {
  if (sender == self.disconnectB) [self.btComm disconnect:self.btComm.activePeripheral];
+}
 
+
+- (IBAction)unwindFromSwitchEditToSwitch:(UIStoryboardSegue *)sender
+{
+ NSLog(@"Unwind from SwitchEditVC to SwitchVC");
 }
 
 
@@ -163,19 +169,25 @@ NSString *str;
  
  self.sharedData = [DataManager sharedDataManager];
  
- self.switchPFO = self.sharedData.selectedSwitchPFO;
- 
- self.accessoriesA = self.switchPFO[@"connectors"];
- 
  self.functionIdsMA = NSMutableArray.new;
  self.functionsMA   = NSMutableArray.new;
  self.relaysMA      = NSMutableArray.new;
  self.relayStatusMA = NSMutableArray.new;
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+ [super viewDidAppear:animated];
+ 
+ self.switchPFO = self.sharedData.selectedSwitchPFO;
+ 
+ self.accessoriesA = self.switchPFO[@"connectors"];
  
  [self loadArrays];
  
  self.switchNameL.text = self.switchPFO[@"name"];
-
+ 
  [self.switchTV reloadData];
 }
 
@@ -238,7 +250,9 @@ NSString *str;
 {
  [self.btComm stopScan];
  
- ((HomeVC *)[segue destinationViewController]).btComm = self.btComm;
+ if ([segue.identifier isEqualToString:@"unwindtohomefromswitch"]) ((HomeVC *)[segue destinationViewController]).btComm = self.btComm;
+ else
+ if ([segue.identifier isEqualToString:@"switchtoswitchedit"]) ((SwitchEditVC *)[segue destinationViewController]).btComm = self.btComm;
 }
 
 

@@ -15,6 +15,10 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *switchTV;
 
+@property (weak, nonatomic) IBOutlet UILabel *messageL;
+
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingAI;
+
 @property (strong, nonatomic) NSArray *switchA,
                                       *functionsA,
                                       *switchDataA,
@@ -69,6 +73,14 @@
 }
 
 
+- (IBAction)unwindFromSwitchEditToHome:(UIStoryboardSegue *)sender
+{
+ NSLog(@"Unwind from SwitchEditVC");
+ 
+ self.switchTV.hidden = YES;
+}
+
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
  return 1;
@@ -95,6 +107,8 @@ NSUUID *uuid;
  
  cell.textLabel.text = switchD[@"name"];
  
+ cell.detailTextLabel.text = @"DEVICE NOT FOUND";
+ 
  for (CBPeripheral *bt in self.btPeripheralsMA)
     {
     if ([bt.identifier.UUIDString isEqualToString:uuid.UUIDString])  //  found bluetooth device that matches a known switch
@@ -102,7 +116,6 @@ NSUUID *uuid;
        cell.detailTextLabel.text = @"AVAILABLE";
        break;
        }
-    else cell.detailTextLabel.text = @"DEVICE NOT FOUND";
     }
 
  return cell;
@@ -127,6 +140,8 @@ NSUUID *uuid;
        break;
        }
     }
+ 
+ [self performSegueWithIdentifier:@"hometoswitch" sender:self];
 }
 
 
@@ -140,7 +155,6 @@ NSUUID *uuid;
 {
  NSLog(@"Connected to peripheral in home: %@", peripheral);
  
- [self performSegueWithIdentifier:@"hometoswitch" sender:self];
 }
 
 
@@ -171,12 +185,22 @@ NSUUID *uuid;
  self.switchRC = UIRefreshControl.new;
  [self.switchRC addTarget:self action:@selector(scanForPeripherals) forControlEvents:UIControlEventValueChanged];
  [self.switchTV addSubview:self.switchRC];
+ 
+ self.messageL.text = @"Loading data from server";
+ [self.loadingAI startAnimating];
+ 
+ [self lookupFunctions];
+ [self lookupSerialCommands];
+ [self lookupAccessories];
+ [self lookupConnectors];
 }
 
 
 - (void)viewDidAppear:(BOOL)animated
 {
  [super viewDidAppear:animated];
+ 
+ self.btComm.delegate = self;
  
  [self loadSwitchArray];
 }
@@ -210,7 +234,8 @@ NSUUID *uuid;
 
 - (void)scanTimer:(NSTimer *)timer
 {
-
+ [self.switchRC endRefreshing];
+ [self.switchTV reloadData];
 }
 
 
@@ -246,8 +271,6 @@ NSUUID *uuid;
     self.retrievedPeripheralsA = [self.btComm.manager retrievePeripheralsWithIdentifiers:self.switchUUIDMA];
     
     [self lookupSwitchData];
-    [self lookupFunctions];
-    [self lookupSerialCommands];
     }
 }
 
@@ -263,9 +286,12 @@ NSUUID *uuid;
     if (!error)
        {
        self.switchA = objects;
-       [self loadAccessoryDataAndScan];
+       
+       [self scanForPeripherals];
+       self.switchTV.hidden = NO;
+       [self.switchTV reloadData];
        }
-    else NSLog(@"Error: %@ %@", error, [error userInfo]);
+    else NSLog(@"Error retrieving valid switches: %@ %@", error, [error userInfo]);
     }
  ];
 }
@@ -281,9 +307,9 @@ NSUUID *uuid;
        {
        self.functionsA = objects;
        self.sharedData.functions = objects;
-       [self loadAccessoryDataAndScan];
+       [self serverCallsCompleted];
        }
-    else NSLog(@"Error: %@ %@", error, [error userInfo]);
+    else NSLog(@"Error retrieving accessory functions: %@ %@", error, [error userInfo]);
     }
  ];
 }
@@ -300,23 +326,58 @@ NSUUID *uuid;
     if (!error)
        {
        self.sharedData.serialCommands = objects;
-       [self loadAccessoryDataAndScan];
+       [self serverCallsCompleted];
        }
-    else NSLog(@"Error: %@ %@", error, [error userInfo]);
+    else NSLog(@"Error retrieving serial commands: %@ %@", error, [error userInfo]);
     }
  ];
 }
 
 
-- (void)loadAccessoryDataAndScan
+- (void)lookupAccessories
+{
+ PFQuery *query = [PFQuery queryWithClassName:@"Accessory"];
+ 
+ [query orderByAscending:@"brand"];
+ 
+ [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+    {
+    if (!error)
+       {
+       self.sharedData.accessories = objects;
+       [self serverCallsCompleted];
+       }
+    else NSLog(@"Error retrieving accessories: %@ %@", error, [error userInfo]);
+    }
+ ];
+}
+
+
+- (void)lookupConnectors
+{
+ PFQuery *query = [PFQuery queryWithClassName:@"Connector"];
+ 
+ [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+    {
+    if (!error)
+       {
+       self.sharedData.connectors = objects;
+       [self serverCallsCompleted];
+       }
+    else NSLog(@"Error retrieving accessories: %@ %@", error, [error userInfo]);
+    }
+ ];
+}
+
+
+- (void)serverCallsCompleted
 {
  self.counter++;
  
- if (self.counter < 3) return;
+ if (self.counter < 4) return;
 
- [self scanForPeripherals];
- 
- self.switchTV.hidden = NO;
+ self.messageL.text = @"You haven't added an Engage switch. Tap the + button above to get started.";
+ [self.loadingAI stopAnimating];
 }
 
 

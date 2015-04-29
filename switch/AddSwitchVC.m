@@ -81,6 +81,13 @@
 }
 
 
+- (void)didDiscoverServices:(CBPeripheral *)peripheral
+{
+ NSLog(@"Discovered services in AddSwitchVC: %@", peripheral);
+
+}
+
+
 - (void)scanTimer:(NSTimer *)timer   // show CV or prompt to plug in, buy, or scan again
 {
  if (self.peripheralMA.count > 0)

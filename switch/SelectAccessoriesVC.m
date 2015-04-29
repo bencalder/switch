@@ -19,18 +19,17 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *accessoryTV;
 
-@property (strong, nonatomic) NSArray *accessoriesA,
-                                      *connectorsA;
+@property (strong, nonatomic) NSArray *accessoriesA;
 
-@property (strong, nonatomic) NSMutableArray *chosenAccessoriesMA;
+@property (strong, nonatomic) NSMutableArray *selectedAccessoriesMA,
+                                             *displayAccessoriesMA;
 
 @property (strong, nonatomic) DataManager *sharedData;
 
 @property (nonatomic) NSInteger counter,
-                                choosingConnectorI,
-                                totalConnectorsI;
+                                choosingAccessoryI;
 
-@property (nonatomic) BOOL accordionOpen;
+@property (nonatomic) BOOL choosingAccessory;
 
 @end
 
@@ -39,16 +38,7 @@
 
 - (IBAction)buttonPress:(id)sender
 {
- if (sender == self.doneB)
-    {
-    for (int i = 0; i < self.totalConnectorsI; i++)
-       {
-       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i]).objectId      forKey:@"accessoryId"];
-       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i])[@"brand"]     forKey:@"accessoryBrand"];
-       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i])[@"model"]     forKey:@"accessoryModel"];
-       [self.sharedData.freshSwitchPFO[@"connectors"][i] setObject:((PFObject *)self.chosenAccessoriesMA[i])[@"functions"] forKey:@"accessoryFunctions"];
-       }
-    }
+ if (sender == self.doneB) self.sharedData.freshSwitchPFO[@"connectors"] = self.selectedAccessoriesMA;
 }
 
 
@@ -61,62 +51,48 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
- if (self.accordionOpen) return self.accessoriesA.count;
- else                    return 1;
-}
-
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
- if (self.accordionOpen) return self.accessoriesA[section][0][@"brand"];
- else                    return nil;
+ return 1;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
- if (self.accordionOpen) return ((NSArray *)self.accessoriesA[section]).count;
- else return self.totalConnectorsI;
+ if (self.choosingAccessory) return self.displayAccessoriesMA.count;
+    else                     return self.selectedAccessoriesMA.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
- UITableViewCell *cell;
+UITableViewCell *cell;
+PFObject *switchPFO;
+NSString *str;
  
- if (self.accordionOpen)
+ switchPFO = self.sharedData.freshSwitchPFO;
+ 
+ cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"subtitle"];
+ 
+ if (self.choosingAccessory)
     {
-    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"subtitle"];
- 
-    PFObject *accessory = self.accessoriesA[indexPath.section][indexPath.row];
- 
-    cell.textLabel.text = accessory[@"model"];
- 
-    for (PFObject *connectorType in self.connectorsA)
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", self.displayAccessoriesMA[indexPath.row][@"brand"], self.displayAccessoriesMA[indexPath.row][@"model"]];
+       
+    if ([((PFObject *)self.displayAccessoriesMA[indexPath.row]).objectId isEqualToString:self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryId"]])
        {
-       if ([accessory[@"connectors"][0][@"objectId"] isEqualToString:connectorType.objectId])
-          {
-          cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@ pin connector", connectorType[@"brand"], connectorType[@"pinCount"]];
-          break;
-          }
+       cell.accessoryType = UITableViewCellAccessoryCheckmark;
        }
-    
-    if (self.chosenAccessoriesMA.count > self.choosingConnectorI)
-       {
-       if ([accessory.objectId isEqualToString:((PFObject *)self.chosenAccessoriesMA[self.choosingConnectorI]).objectId])
-          [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-       }
+    else cell.accessoryType = UITableViewCellAccessoryNone;
     }
  else
     {
-    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"default"];
-    
-    if (self.chosenAccessoriesMA.count > indexPath.row)
+    if ((str = self.selectedAccessoriesMA[indexPath.row][@"accessoryBrand"]) == nil)  //  user has not chosen an accessory for this connector
        {
-       if ([self.chosenAccessoriesMA[indexPath.row] isKindOfClass:[PFObject class]]) cell.textLabel.text = [NSString stringWithFormat:@"Connector %li: %@ %@", indexPath.row + 1, self.chosenAccessoriesMA[indexPath.row][@"brand"], self.chosenAccessoriesMA[indexPath.row][@"model"]];
-       else cell.textLabel.text = [NSString stringWithFormat:@"Choose accessory for Connector %li", indexPath.row + 1];
+       cell.textLabel.text = [NSString stringWithFormat:@"Choose an accessory for Connector %li", indexPath.row + 1];
        }
-    else cell.textLabel.text = [NSString stringWithFormat:@"Choose accessory for Connector %li", indexPath.row + 1];
+    else
+       {
+       cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0];
+       cell.textLabel.text = [NSString stringWithFormat:@"Connector %ld: %@ %@", indexPath.row + 1, switchPFO[@"connectors"][indexPath.row][@"accessoryBrand"], switchPFO[@"connectors"][indexPath.row][@"accessoryModel"]];
+       }
     }
  
  return cell;
@@ -125,32 +101,42 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-UITableViewCell *cell;
-
- if (self.accordionOpen)
+ if (self.choosingAccessory)
     {
-    cell = [tableView cellForRowAtIndexPath:indexPath];
- 
-    if (cell.accessoryType == UITableViewCellAccessoryNone)
-       {
-       [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-        
-       if (self.chosenAccessoriesMA.count > self.choosingConnectorI)
-          {
-          [self.chosenAccessoriesMA replaceObjectAtIndex:self.choosingConnectorI withObject:self.accessoriesA[indexPath.section][indexPath.row]];
-          }
-       else [self.chosenAccessoriesMA insertObject:self.accessoriesA[indexPath.section][indexPath.row] atIndex:self.choosingConnectorI];
-       }
-     
-    self.accordionOpen = NO;
+    self.choosingAccessory = NO;
+
+    self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryBrand"]     = self.displayAccessoriesMA[indexPath.row][@"brand"];
+    self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryModel"]     = self.displayAccessoriesMA[indexPath.row][@"model"];
+    self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryFunctions"] = self.displayAccessoriesMA[indexPath.row][@"functions"];
+    self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryId"]        = ((PFObject *)self.displayAccessoriesMA[indexPath.row]).objectId;
     }
  else
     {
-    self.choosingConnectorI = indexPath.row;
-    self.accordionOpen = YES;
+    self.choosingAccessory = YES;
+    [self buildAccessoryArrayForConnector:indexPath.row];
     }
  
- [self.accessoryTV reloadData];
+ [self.accessoryTV reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+
+- (void)buildAccessoryArrayForConnector:(NSInteger)connectorInt
+{
+ self.choosingAccessoryI = connectorInt;
+
+ self.displayAccessoriesMA = NSMutableArray.new;
+ 
+ for (PFObject *accessory in self.sharedData.accessories)  // loop through all of the possible accessories
+    {
+    for (int i = 0; i < ((NSArray *)accessory[@"connectors"]).count; i++)   //  loop through each connector of each accessory
+       {
+       if ([accessory[@"connectors"][i][@"objectId"] isEqualToString:self.selectedAccessoriesMA[connectorInt][@"objectId"]])
+          {
+          [self.displayAccessoriesMA addObject:accessory];
+          break;
+          }
+       }
+    }
 }
 
 
@@ -160,87 +146,9 @@ UITableViewCell *cell;
  
  self.sharedData = [DataManager sharedDataManager];
  
- self.counter = 0;
-
- [self lookupAccessories];
- [self lookupConnectors];
+ self.choosingAccessory = NO;
  
- self.chosenAccessoriesMA = NSMutableArray.new;
- 
- self.accordionOpen = NO;
- 
- self.totalConnectorsI = ((NSArray *)self.sharedData.freshSwitchPFO[@"connectors"]).count;  // number of connectors that need to be set
- 
- self.messageL.text = [NSString stringWithFormat:@"%@ has %lu connectors. What will you plug in to Connector 1?", self.sharedData.freshSwitchPFO[@"name"], (unsigned long)((NSArray *)self.sharedData.freshSwitchPFO[@"connectors"]).count];
-}
-
-
-- (void)lookupAccessories
-{
- PFQuery *query = [PFQuery queryWithClassName:@"Accessory"];
- 
- [query addAscendingOrder:@"brand"];   // sort by brand
- 
- [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-    {
-    if (!error)
-       {
-       NSMutableArray *brandsMA, *accMA;
-       NSString *str;
-       
-       brandsMA = NSMutableArray.new;
-       accMA    = NSMutableArray.new;
-       str      = objects[0][@"brand"];
-       
-       for (int i = 0; i < objects.count; i++)
-          {
-          PFObject *obj = objects[i];
-          
-          if ([obj[@"brand"] isEqualToString:str])   // same brand
-             {
-             [accMA addObject:obj];
-             }
-          else    // new brand
-             {
-             [brandsMA addObject:[accMA mutableCopy]];
-             [accMA removeAllObjects];
-             str = objects[i + 1][@"brand"];
-             }
-          }
-        
-       self.accessoriesA = brandsMA;
-       [self buildTable];
-       }
-    else NSLog(@"Error: %@ %@", error, [error userInfo]);
-    }
- ];
-}
-
-
-- (void)lookupConnectors
-{
- PFQuery *query = [PFQuery queryWithClassName:@"Connector"];
- 
- [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-    {
-    if (!error)
-       {
-       self.connectorsA = objects;
-       [self buildTable];
-       }
-    else NSLog(@"Error: %@ %@", error, [error userInfo]);
-    }
- ];
-}
-
-
-- (void)buildTable
-{
- self.counter++;
- 
- if (self.counter < 2) return;
- 
- [self.accessoryTV reloadData];
+ self.selectedAccessoriesMA = self.sharedData.freshSwitchPFO[@"connectors"];
 }
 
 
