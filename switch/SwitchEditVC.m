@@ -16,7 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *backB;
 @property (weak, nonatomic) IBOutlet UIButton *saveB;
 
-@property (strong, nonatomic) UIButton *keyboardDoneB;
+@property (strong, nonatomic) UIButton *keyboardDoneB,
+                                       *keyboardCancelB;
 
 @property (strong, nonatomic) UITextField *nameTF;
 
@@ -36,6 +37,8 @@
 @property (nonatomic) BOOL choosingAccessory;
 
 @property (nonatomic) NSInteger choosingAccessoryI;
+
+@property (strong, nonatomic) NSString *cancelNameS;
 
 @end
 
@@ -113,12 +116,13 @@
 {
 UITableViewCell *cell;
 PFObject *switchPFO;
+NSDictionary *d;
  
  cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"subtitle"];
  
  switchPFO = self.sharedData.selectedSwitchPFO;
  
- if (indexPath.section == 0)
+ if (indexPath.section == 0)    // Name
     {
     for (UIView *vw in cell.contentView.subviews) [vw removeFromSuperview];
     
@@ -134,7 +138,7 @@ PFObject *switchPFO;
     [cell.contentView addSubview:self.nameTF];
     }
  else
- if (indexPath.section == 1)
+ if (indexPath.section == 1)   //  Accessories
     {
     if (self.choosingAccessory)
        {
@@ -148,12 +152,15 @@ PFObject *switchPFO;
        }
     else
        {
-       cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0];
-       cell.textLabel.text = [NSString stringWithFormat:@"Connector %ld: %@ %@", indexPath.row + 1, switchPFO[@"connectors"][indexPath.row][@"accessoryBrand"], switchPFO[@"connectors"][indexPath.row][@"accessoryModel"]];
+       d = self.selectedAccessoriesMA[indexPath.row];
+       
+       cell.textLabel.font       = [UIFont fontWithName:@"Helvetica" size:13.0];
+       cell.textLabel.text       = [NSString stringWithFormat:@"%@ %@", d[@"accessoryBrand"], d[@"accessoryModel"]];
+       cell.detailTextLabel.text = [NSString stringWithFormat:@"Connector %ld", indexPath.row + 1];
        }
     }
  else
- if (indexPath.section == 2)
+ if (indexPath.section == 2)    // Delete switch
     {
     cell.textLabel.text       = @"Delete switch";
     cell.detailTextLabel.text = @"This will permanently delete this switch from your account.";
@@ -169,12 +176,19 @@ PFObject *switchPFO;
     {
     if (self.choosingAccessory)
        {
+       NSDictionary *d;
+       
+       d = @{@"accessoryBrand"     : self.displayAccessoriesMA[indexPath.row][@"brand"],
+             @"accessoryModel"     : self.displayAccessoriesMA[indexPath.row][@"model"],
+             @"accessoryFunctions" : self.displayAccessoriesMA[indexPath.row][@"functions"],
+             @"accessoryId"        : ((PFObject *)self.displayAccessoriesMA[indexPath.row]).objectId,
+             @"objectId"           : self.selectedAccessoriesMA[self.choosingAccessoryI][@"objectId"],
+             @"relays"             : self.selectedAccessoriesMA[self.choosingAccessoryI][@"relays"]
+            };
+       
+       [self.selectedAccessoriesMA replaceObjectAtIndex:self.choosingAccessoryI withObject:d];
+       
        self.choosingAccessory = NO;
-
-       self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryBrand"]     = self.displayAccessoriesMA[indexPath.row][@"brand"];
-       self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryModel"]     = self.displayAccessoriesMA[indexPath.row][@"model"];
-       self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryFunctions"] = self.displayAccessoriesMA[indexPath.row][@"functions"];
-       self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryId"]        = ((PFObject *)self.displayAccessoriesMA[indexPath.row]).objectId;
        
        self.saveB.hidden = NO;
        }
@@ -184,7 +198,7 @@ PFObject *switchPFO;
        [self buildAccessoryArrayForConnector:indexPath.row];
        }
      
-    [self.editTV reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.editTV reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
  else
  if (indexPath.section == 2)  // delete
@@ -228,7 +242,15 @@ UIView *vw;
  [self.keyboardDoneB setTitle:@"Done" forState:UIControlStateNormal];
  [self.keyboardDoneB addTarget:self action:@selector(doneWithKeyboard:) forControlEvents:UIControlEventTouchUpInside];
  
+ self.keyboardCancelB       = [UIButton buttonWithType:UIButtonTypeSystem];
+ self.keyboardCancelB.frame = CGRectMake(10, 0, 50, 50);
+ [self.keyboardCancelB setTitle:@"Cancel" forState:UIControlStateNormal];
+ [self.keyboardCancelB addTarget:self action:@selector(cancelKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+
+ self.cancelNameS = self.nameTF.text;
+ 
  [vw addSubview:self.keyboardDoneB];
+ [vw addSubview:self.keyboardCancelB];
 
 return vw;
 }
@@ -237,7 +259,15 @@ return vw;
 - (void)doneWithKeyboard:(UIButton *)sender
 {
  [self.nameTF resignFirstResponder];
+}
 
+
+- (void)cancelKeyboard:(UIButton *)sender
+{
+ [self.nameTF resignFirstResponder];
+ self.nameTF.text = self.cancelNameS;
+ 
+ self.saveB.hidden = YES;
 }
 
 
@@ -266,7 +296,7 @@ return vw;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSArray *a = [defaults objectForKey:@"switchArray"];
-    NSMutableArray *switchA;
+    NSMutableArray *switchA = NSMutableArray.new;
     
     for (NSDictionary *d in a)
        [switchA addObject:d];
@@ -300,7 +330,7 @@ return vw;
  
  self.sharedData = [DataManager sharedDataManager];
  
- self.selectedAccessoriesMA = self.sharedData.selectedSwitchPFO[@"connectors"];
+ self.selectedAccessoriesMA = [[NSMutableArray alloc] initWithArray:self.sharedData.selectedSwitchPFO[@"connectors"] copyItems:YES];
  
  self.sectionTitleA = @[@"Switch name", @"Accessories", @"Delete"];
  

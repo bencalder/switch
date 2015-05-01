@@ -7,11 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5300FD631AF1AD5F004F0889 /* NewSwitchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5300FD621AF1AD5F004F0889 /* NewSwitchVC.m */; };
 		53177D911AE71B8A00056724 /* HomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53177D901AE71B8A00056724 /* HomeVC.m */; };
-		53177D941AE71FA300056724 /* AddSwitchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53177D931AE71FA300056724 /* AddSwitchVC.m */; };
 		53177D971AE744AF00056724 /* CreateSwitchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53177D961AE744AF00056724 /* CreateSwitchVC.m */; };
 		53177D9A1AE8A75700056724 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53177D991AE8A75700056724 /* DataManager.m */; };
-		53177DA01AE8AB7A00056724 /* NameSwitchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53177D9F1AE8AB7A00056724 /* NameSwitchVC.m */; };
 		53188E2E1AE6F79500AFB44C /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53188E2C1AE6F79500AFB44C /* Bolts.framework */; };
 		53188E2F1AE6F79500AFB44C /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53188E2D1AE6F79500AFB44C /* Parse.framework */; };
 		53188E3B1AE6F80100AFB44C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53188E301AE6F80100AFB44C /* AudioToolbox.framework */; };
@@ -27,17 +26,13 @@
 		53188E451AE6F80100AFB44C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53188E3A1AE6F80100AFB44C /* SystemConfiguration.framework */; };
 		53412D471ACC9737009CB1AB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53412D461ACC9737009CB1AB /* main.m */; };
 		53412D4A1ACC9737009CB1AB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53412D491ACC9737009CB1AB /* AppDelegate.m */; };
-		53412D4D1ACC9737009CB1AB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53412D4C1ACC9737009CB1AB /* ViewController.m */; };
 		53412D501ACC9737009CB1AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53412D4E1ACC9737009CB1AB /* Main.storyboard */; };
 		53412D521ACC9737009CB1AB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53412D511ACC9737009CB1AB /* Images.xcassets */; };
 		53412D551ACC9737009CB1AB /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53412D531ACC9737009CB1AB /* LaunchScreen.xib */; };
 		53412D611ACC9737009CB1AB /* switchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53412D601ACC9737009CB1AB /* switchTests.m */; };
 		53412D6E1ACCA268009CB1AB /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53412D6D1ACCA268009CB1AB /* CoreBluetooth.framework */; };
-		53412D711ACCB8DD009CB1AB /* PeripheralVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53412D701ACCB8DD009CB1AB /* PeripheralVC.m */; };
 		537DF3B11AF04AC6005BB1EB /* SwitchEditVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 537DF3B01AF04AC6005BB1EB /* SwitchEditVC.m */; };
 		53E825A71ACE073400ADD347 /* BluetoothComm.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E825A61ACE073400ADD347 /* BluetoothComm.m */; };
-		53FD5BF41AE9FD8D004B0A6F /* SummaryVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53FD5BF31AE9FD8D004B0A6F /* SummaryVC.m */; };
-		53FD5BF71AEA2041004B0A6F /* SelectAccessoriesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53FD5BF61AEA2041004B0A6F /* SelectAccessoriesVC.m */; };
 		53FD5BFA1AEB311C004B0A6F /* SwitchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53FD5BF91AEB311C004B0A6F /* SwitchVC.m */; };
 /* End PBXBuildFile section */
 
@@ -52,16 +47,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5300FD611AF1AD5F004F0889 /* NewSwitchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewSwitchVC.h; sourceTree = "<group>"; };
+		5300FD621AF1AD5F004F0889 /* NewSwitchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewSwitchVC.m; sourceTree = "<group>"; };
 		53177D8F1AE71B8A00056724 /* HomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeVC.h; sourceTree = "<group>"; };
 		53177D901AE71B8A00056724 /* HomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeVC.m; sourceTree = "<group>"; };
-		53177D921AE71FA300056724 /* AddSwitchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSwitchVC.h; sourceTree = "<group>"; };
-		53177D931AE71FA300056724 /* AddSwitchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSwitchVC.m; sourceTree = "<group>"; };
 		53177D951AE744AF00056724 /* CreateSwitchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateSwitchVC.h; sourceTree = "<group>"; };
 		53177D961AE744AF00056724 /* CreateSwitchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateSwitchVC.m; sourceTree = "<group>"; };
 		53177D981AE8A75700056724 /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		53177D991AE8A75700056724 /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
-		53177D9E1AE8AB7A00056724 /* NameSwitchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameSwitchVC.h; sourceTree = "<group>"; };
-		53177D9F1AE8AB7A00056724 /* NameSwitchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameSwitchVC.m; sourceTree = "<group>"; };
 		53188E2C1AE6F79500AFB44C /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		53188E2D1AE6F79500AFB44C /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		53188E301AE6F80100AFB44C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -80,8 +73,6 @@
 		53412D461ACC9737009CB1AB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		53412D481ACC9737009CB1AB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		53412D491ACC9737009CB1AB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		53412D4B1ACC9737009CB1AB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		53412D4C1ACC9737009CB1AB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		53412D4F1ACC9737009CB1AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		53412D511ACC9737009CB1AB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		53412D541ACC9737009CB1AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -89,16 +80,10 @@
 		53412D5F1ACC9737009CB1AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53412D601ACC9737009CB1AB /* switchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = switchTests.m; sourceTree = "<group>"; };
 		53412D6D1ACCA268009CB1AB /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
-		53412D6F1ACCB8DD009CB1AB /* PeripheralVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeripheralVC.h; sourceTree = "<group>"; };
-		53412D701ACCB8DD009CB1AB /* PeripheralVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeripheralVC.m; sourceTree = "<group>"; };
 		537DF3AF1AF04AC6005BB1EB /* SwitchEditVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchEditVC.h; sourceTree = "<group>"; };
 		537DF3B01AF04AC6005BB1EB /* SwitchEditVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchEditVC.m; sourceTree = "<group>"; };
 		53E825A51ACE073400ADD347 /* BluetoothComm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothComm.h; sourceTree = "<group>"; };
 		53E825A61ACE073400ADD347 /* BluetoothComm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothComm.m; sourceTree = "<group>"; };
-		53FD5BF21AE9FD8D004B0A6F /* SummaryVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SummaryVC.h; sourceTree = "<group>"; };
-		53FD5BF31AE9FD8D004B0A6F /* SummaryVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SummaryVC.m; sourceTree = "<group>"; };
-		53FD5BF51AEA2041004B0A6F /* SelectAccessoriesVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectAccessoriesVC.h; sourceTree = "<group>"; };
-		53FD5BF61AEA2041004B0A6F /* SelectAccessoriesVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectAccessoriesVC.m; sourceTree = "<group>"; };
 		53FD5BF81AEB311C004B0A6F /* SwitchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchVC.h; sourceTree = "<group>"; };
 		53FD5BF91AEB311C004B0A6F /* SwitchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -161,32 +146,22 @@
 				53412D491ACC9737009CB1AB /* AppDelegate.m */,
 				53177D8F1AE71B8A00056724 /* HomeVC.h */,
 				53177D901AE71B8A00056724 /* HomeVC.m */,
+				5300FD611AF1AD5F004F0889 /* NewSwitchVC.h */,
+				5300FD621AF1AD5F004F0889 /* NewSwitchVC.m */,
 				53FD5BF81AEB311C004B0A6F /* SwitchVC.h */,
 				53FD5BF91AEB311C004B0A6F /* SwitchVC.m */,
 				537DF3AF1AF04AC6005BB1EB /* SwitchEditVC.h */,
 				537DF3B01AF04AC6005BB1EB /* SwitchEditVC.m */,
-				53177D921AE71FA300056724 /* AddSwitchVC.h */,
-				53177D931AE71FA300056724 /* AddSwitchVC.m */,
-				53177D9E1AE8AB7A00056724 /* NameSwitchVC.h */,
-				53177D9F1AE8AB7A00056724 /* NameSwitchVC.m */,
-				53FD5BF51AEA2041004B0A6F /* SelectAccessoriesVC.h */,
-				53FD5BF61AEA2041004B0A6F /* SelectAccessoriesVC.m */,
-				53FD5BF21AE9FD8D004B0A6F /* SummaryVC.h */,
-				53FD5BF31AE9FD8D004B0A6F /* SummaryVC.m */,
 				53177D951AE744AF00056724 /* CreateSwitchVC.h */,
 				53177D961AE744AF00056724 /* CreateSwitchVC.m */,
-				53412D4B1ACC9737009CB1AB /* ViewController.h */,
-				53412D4C1ACC9737009CB1AB /* ViewController.m */,
-				53412D6F1ACCB8DD009CB1AB /* PeripheralVC.h */,
-				53412D701ACCB8DD009CB1AB /* PeripheralVC.m */,
 				53E825A51ACE073400ADD347 /* BluetoothComm.h */,
 				53E825A61ACE073400ADD347 /* BluetoothComm.m */,
 				53412D4E1ACC9737009CB1AB /* Main.storyboard */,
 				53412D511ACC9737009CB1AB /* Images.xcassets */,
 				53412D531ACC9737009CB1AB /* LaunchScreen.xib */,
-				53412D441ACC9737009CB1AB /* Supporting Files */,
 				53177D981AE8A75700056724 /* DataManager.h */,
 				53177D991AE8A75700056724 /* DataManager.m */,
+				53412D441ACC9737009CB1AB /* Supporting Files */,
 			);
 			path = switch;
 			sourceTree = "<group>";
@@ -339,20 +314,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53412D4D1ACC9737009CB1AB /* ViewController.m in Sources */,
-				53412D711ACCB8DD009CB1AB /* PeripheralVC.m in Sources */,
-				53FD5BF71AEA2041004B0A6F /* SelectAccessoriesVC.m in Sources */,
 				53177D971AE744AF00056724 /* CreateSwitchVC.m in Sources */,
 				53412D4A1ACC9737009CB1AB /* AppDelegate.m in Sources */,
-				53177D941AE71FA300056724 /* AddSwitchVC.m in Sources */,
 				53177D911AE71B8A00056724 /* HomeVC.m in Sources */,
 				53412D471ACC9737009CB1AB /* main.m in Sources */,
 				53FD5BFA1AEB311C004B0A6F /* SwitchVC.m in Sources */,
 				53177D9A1AE8A75700056724 /* DataManager.m in Sources */,
-				53FD5BF41AE9FD8D004B0A6F /* SummaryVC.m in Sources */,
 				537DF3B11AF04AC6005BB1EB /* SwitchEditVC.m in Sources */,
+				5300FD631AF1AD5F004F0889 /* NewSwitchVC.m in Sources */,
 				53E825A71ACE073400ADD347 /* BluetoothComm.m in Sources */,
-				53177DA01AE8AB7A00056724 /* NameSwitchVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

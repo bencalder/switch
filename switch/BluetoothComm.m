@@ -17,7 +17,7 @@
 @implementation BluetoothComm
 
 
-- (void)setup   // enable CoreBluetooth CentralManager and set the delegate for SerialGATT
+- (void)setup   // enable CoreBluetooth CentralManager and set the delegate
 {
  self.manager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
 }

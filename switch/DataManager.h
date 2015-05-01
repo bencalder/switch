@@ -21,7 +21,8 @@
 @property (nonatomic, strong) NSArray *functions,      //  downloaded data from Parse
                                       *serialCommands,
                                       *accessories,
-                                      *connectors;
+                                      *connectors,
+                                      *savedSwitchData;
 
 @property (nonatomic, strong) BluetoothComm *btComm;
 

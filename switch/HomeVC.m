@@ -13,6 +13,8 @@
 
 @interface HomeVC () <UITableViewDelegate, UITableViewDataSource, BTDelegate>
 
+@property (weak, nonatomic) IBOutlet UIButton *addSwitchB;
+
 @property (weak, nonatomic) IBOutlet UITableView *switchTV;
 
 @property (weak, nonatomic) IBOutlet UILabel *messageL;
@@ -21,7 +23,6 @@
 
 @property (strong, nonatomic) NSArray *switchA,
                                       *functionsA,
-                                      *switchDataA,
                                       *retrievedPeripheralsA;
 
 @property (strong, nonatomic) NSMutableArray *switchAccessoriesMA,
@@ -46,6 +47,12 @@
 - (IBAction)unwindFromAddSwitch:(UIStoryboardSegue *)sender
 {
  NSLog(@"Unwind from AddSwitchVC");
+}
+
+
+- (IBAction)unwindFromNewSwitch:(UIStoryboardSegue *)sender
+{
+ NSLog(@"Unwind from NewSwitchVC");
 }
 
 
@@ -256,14 +263,14 @@ NSUUID *uuid;
 {
  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
  
- if ((self.switchDataA = [defaults objectForKey:@"switchArray"]) != nil)  // if switch data is already saved on phone
+ if ((self.sharedData.savedSwitchData = [defaults objectForKey:@"switchArray"]) != nil)  // if switch data is already saved on phone
     {
     self.counter = 0;
     
     self.switchObjectIdMA = NSMutableArray.new;
     self.switchUUIDMA     = NSMutableArray.new;
     
-    for (NSDictionary *d in self.switchDataA)
+    for (NSDictionary *d in self.sharedData.savedSwitchData)
        {
        [self.switchObjectIdMA addObject:d[@"objectId"]];
        [self.switchUUIDMA     addObject:[[NSUUID alloc] initWithUUIDString:d[@"uuid"]]];
