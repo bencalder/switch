@@ -42,6 +42,8 @@
 
 @property (strong, nonatomic) UIActivityIndicatorView *processingAI;
 
+@property (strong, nonatomic) UIAlertView *invalidProductIdAV;
+
 @end
 
 @implementation NewSwitchVC
@@ -143,7 +145,6 @@ NSString *str;
        self.nameTF                        = UITextField.new;
        self.nameTF.frame                  = CGRectMake(15, 0, self.switchTV.frame.size.width - 40, cell.frame.size.height);
        self.nameTF.delegate               = self;
-       self.nameTF.autocorrectionType     = UITextAutocorrectionTypeNo;
        self.nameTF.autocapitalizationType = UITextAutocapitalizationTypeWords;
        self.nameTF.borderStyle            = UITextBorderStyleNone;
        self.nameTF.placeholder            = @"Enter a name for your switch.";
@@ -384,8 +385,6 @@ NSString *str;
     {
     if (!error)
        {
-       [self.processingAI stopAnimating];
-       
        self.sharedData.freshSwitchPFO = object;
        self.sharedData.freshSwitchPFO[@"uuid"] = ((CBPeripheral *)self.peripheralMA[0]).identifier.UUIDString;
        
@@ -402,9 +401,35 @@ NSString *str;
        
        [self.nameTF becomeFirstResponder];
        }
-    else NSLog(@"Error: %@ %@", error, [error userInfo]);
+    else
+       {
+       NSLog(@"Error: %@ %@", error, [error userInfo]);
+       
+       self.productIdTF.text = @"";
+       
+       [self showInvalidAV];
+       }
+     
+    [self.processingAI stopAnimating];
     }
  ];
+}
+
+
+- (void)showInvalidAV
+{
+ self.invalidProductIdAV = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The product ID that you entered is invalid. Please try again." delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
+ [self.invalidProductIdAV show];
+       
+ [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlertView:) userInfo:nil repeats:NO];
+}
+
+
+- (void)dismissAlertView:(NSTimer *)timer
+{
+ [self.invalidProductIdAV dismissWithClickedButtonIndex:0 animated:YES];
+ 
+ [self.productIdTF becomeFirstResponder];
 }
 
 

@@ -291,7 +291,7 @@ return vw;
 {
  if (buttonIndex == 0)   // remove the dict of the current switch from user defaults and send user back to HomeVC
     {
-    [self.btComm disconnect:self.btComm.activePeripheral];
+    if (self.btComm.activePeripheral) [self.btComm disconnect:self.btComm.activePeripheral];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
