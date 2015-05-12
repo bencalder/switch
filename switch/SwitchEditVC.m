@@ -293,27 +293,37 @@ return vw;
     {
     if (self.btComm.activePeripheral) [self.btComm disconnect:self.btComm.activePeripheral];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    NSArray *a = [defaults objectForKey:@"switchArray"];
-    NSMutableArray *switchA = NSMutableArray.new;
-    
-    for (NSDictionary *d in a)
-       [switchA addObject:d];
-    
-    for (NSDictionary *switchD in switchA)
-       {
-       if ([switchD[@"objectId"] isEqualToString:self.sharedData.selectedSwitchPFO.objectId])
-          [switchA removeObject:switchD];
-       }
-     
-    if (switchA.count > 0) [defaults setObject:switchA forKey:@"switchArray"];
-    else                   [defaults removeObjectForKey:@"switchArray"];
-    
-    [defaults synchronize];
-    
-    [self performSegueWithIdentifier:@"unwindfromswitchedittohome" sender:self];
+    [self deleteSwitch];
     }
+}
+
+
+- (void)deleteSwitch
+{
+NSUserDefaults *defaults;
+NSArray *a;
+NSMutableArray *switchA;
+
+ defaults = [NSUserDefaults standardUserDefaults];
+ 
+ a = [defaults objectForKey:@"switchArray"];
+ 
+ switchA = NSMutableArray.new;
+    
+ for (NSDictionary *d in a) [switchA addObject:d];
+    
+ for (NSDictionary *switchD in switchA)
+    {
+    if ([switchD[@"objectId"] isEqualToString:self.sharedData.selectedSwitchPFO.objectId])
+       [switchA removeObject:switchD];
+    }
+     
+ if (switchA.count > 0) [defaults setObject:switchA forKey:@"switchArray"];
+ else                   [defaults removeObjectForKey:@"switchArray"];
+    
+ [defaults synchronize];
+ 
+ [self performSegueWithIdentifier:@"unwindfromswitchedittohome" sender:self];
 }
 
 

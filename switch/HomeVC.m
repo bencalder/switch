@@ -27,6 +27,7 @@
 
 @property (strong, nonatomic) NSMutableArray *switchAccessoriesMA,
                                              *btPeripheralsMA,
+                                             *btRSSIMA,
                                              *switchObjectIdMA,
                                              *switchUUIDMA;
 
@@ -38,51 +39,43 @@
 
 @property (strong, nonatomic) UIRefreshControl *switchRC;
 
+@property (strong, nonatomic) CBPeripheral *connectedToNewP;
+
+@property (nonatomic) BOOL connectToNewMode;
+
 @end
 
 
 @implementation HomeVC
 
 
-- (IBAction)unwindFromAddSwitch:(UIStoryboardSegue *)sender
-{
- NSLog(@"Unwind from AddSwitchVC");
-}
-
-
 - (IBAction)unwindFromNewSwitch:(UIStoryboardSegue *)sender
 {
- NSLog(@"Unwind from NewSwitchVC");
+ NSLog(@"Unwind to HomeVC from NewSwitchVC");
 }
 
 
 - (IBAction)unwindFromCreateSwitch:(UIStoryboardSegue *)sender
 {
- NSLog(@"Unwind from CreateSwitchVC");
-}
-
-
-- (IBAction)unwindToHomeFromSummary:(UIStoryboardSegue *)sender
-{
- NSLog(@"Unwind to Home from SummaryVC");
+ NSLog(@"Unwind to HomeVC from CreateSwitchVC");
 }
 
 
 - (IBAction)unwindFromSwitch:(UIStoryboardSegue *)sender
 {
- NSLog(@"Unwind from SwitchVC");
+ NSLog(@"Unwind to HomeVC from SwitchVC");
 }
 
 
 - (IBAction)unwindFromWrite:(UIStoryboardSegue *)sender
 {
- NSLog(@"Unwind from WriteVC");
+ NSLog(@"Unwind to HomeVC from WriteVC");
 }
 
 
 - (IBAction)unwindFromSwitchEditToHome:(UIStoryboardSegue *)sender
 {
- NSLog(@"Unwind from SwitchEditVC");
+ NSLog(@"Unwind to HomeVC from SwitchEditVC");
  
  self.switchTV.hidden = YES;
 }
@@ -117,11 +110,20 @@ NSUUID *uuid;
  
  cell.detailTextLabel.text = @"DEVICE NOT FOUND";
  
- for (CBPeripheral *bt in self.btPeripheralsMA)
+ for (int i = 0; i < self.btPeripheralsMA.count; i++)
     {
+    CBPeripheral *bt = self.btPeripheralsMA[i];
+    
     if ([bt.identifier.UUIDString isEqualToString:uuid.UUIDString])  //  found bluetooth device that matches a known switch
        {
        cell.detailTextLabel.text = @"AVAILABLE";
+        
+       if (self.btComm.activePeripheral != nil)   //  check if this is the active peripheral
+          {
+          if ([self.btComm.activePeripheral.identifier.UUIDString isEqualToString:bt.identifier.UUIDString]) cell.detailTextLabel.text = @"CONNECTED";
+          }
+       
+       [self addSignalStrengthToCell:cell withIndex:i];
        break;
        }
     }
@@ -132,7 +134,6 @@ NSUUID *uuid;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-CBPeripheral *selected;
 NSUUID *uuid;
 
  self.sharedData.selectedSwitchPFO = self.switchA[indexPath.row];
@@ -141,21 +142,53 @@ NSUUID *uuid;
  
  for (CBPeripheral *bt in self.btPeripheralsMA)
     {
-    if ([bt.identifier.UUIDString isEqualToString:uuid.UUIDString])
+    if (self.btComm.activePeripheral != nil)  // active peripheral exists
        {
-       selected = bt;
-       [self.btComm connect:selected];
+       if ([self.btComm.activePeripheral.identifier.UUIDString isEqualToString:bt.identifier.UUIDString]) [self performSegueWithIdentifier:@"hometoswitch" sender:self];   // the active peripheral matches the one that was tapped, so perform the segue (no connection logic needs to be performed)
+       else
+          {
+          if ([bt.identifier.UUIDString isEqualToString:uuid.UUIDString])
+             {
+             self.connectToNewMode = YES;
+             self.connectedToNewP  = bt;
+             [self.btComm disconnect:self.btComm.activePeripheral];   //  active peripheral exists and the one that was tapped is different, so disconnect from the active
+             }
+          }
+       }
+    else
+    if ([bt.identifier.UUIDString isEqualToString:uuid.UUIDString])  //  no active peripheral exists, so connect the one that was tapped
+       {
+       [self.btComm connect:bt];
+       self.connectToNewMode = YES;
        break;
        }
     }
- 
- [self performSegueWithIdentifier:@"hometoswitch" sender:self];
 }
 
 
-- (void)setConnect
+- (void)addSignalStrengthToCell:(UITableViewCell *)cell withIndex:(int)index
 {
- NSLog(@"set connect home");
+UIImageView *iV;
+NSNumber *sigStrengthN;
+NSString *str;
+
+ iV = UIImageView.new;
+ iV.frame = CGRectMake(cell.frame.size.width - 10, 30, 30, 30);
+ 
+ sigStrengthN = self.btRSSIMA[index];
+ 
+ if (sigStrengthN.intValue > -60) str = @"icon_signalstrength_100.png";
+ else
+ if (sigStrengthN.intValue > -70) str = @"icon_signalstrength_80.png";
+ else
+ if (sigStrengthN.intValue > -80) str = @"icon_signalstrength_60.png";
+ else
+ if (sigStrengthN.intValue > -90) str = @"icon_signalstrength_40.png";
+ else                             str = @"icon_signalstrength_20.png";
+ 
+ iV.image = [UIImage imageNamed:str];
+ 
+ [cell addSubview:iV];
 }
 
 
@@ -163,6 +196,11 @@ NSUUID *uuid;
 {
  NSLog(@"Connected to peripheral in home: %@", peripheral);
  
+ if (self.connectToNewMode)
+    {
+    self.connectToNewMode = NO;
+    [self performSegueWithIdentifier:@"hometoswitch" sender:self];
+    }
 }
 
 
@@ -175,7 +213,14 @@ NSUUID *uuid;
 - (void)didDisconnect:(CBPeripheral *)peripheral
 {
  NSLog(@"Disconnected from peripheral: %@", peripheral);
+ 
+ if (self.connectToNewMode) [self.btComm connect:self.connectedToNewP];   //   if we're handling disconnect/reconnect then connect the one we want
+}
 
+
+- (void)didReadRSSI:(NSNumber *)RSSI
+{
+ NSLog(@"RSSI: %i", RSSI.intValue);
 }
 
 
@@ -197,6 +242,8 @@ NSUUID *uuid;
  self.messageL.text = @"Loading data from server";
  [self.loadingAI startAnimating];
  
+ self.connectToNewMode = NO;
+ 
  [self lookupFunctions];
  [self lookupSerialCommands];
  [self lookupAccessories];
@@ -210,7 +257,8 @@ NSUUID *uuid;
  
  self.btComm.delegate = self;
  
- [self loadSwitchArray];
+ if (self.btComm.activePeripheral == nil) [self loadSwitchArray];     //  no active peripheral exists so load new data and scan
+ else                                     [self.switchTV reloadData]; // active peripheral exists so just reload the table to show which one is connected
 }
 
 
@@ -224,13 +272,14 @@ NSUUID *uuid;
        self.btComm.activePeripheral = nil;
        }
     }
-    
+ 
  if ([self.btComm peripherals])
     {
     self.btComm.peripherals = nil;
     }
  
  self.btPeripheralsMA = NSMutableArray.new;
+ self.btRSSIMA        = NSMutableArray.new;
  
  NSLog(@"Scanning");
  
@@ -247,13 +296,12 @@ NSUUID *uuid;
 }
 
 
-- (void)peripheralFound:(CBPeripheral *)peripheral
+- (void)peripheralFound:(CBPeripheral *)peripheral withRSSI:(NSNumber *)RSSI
 {
  [self.switchRC endRefreshing];
- 
- NSLog(@"Found peripheral with UUID: %@", peripheral.identifier.UUIDString);
 
  [self.btPeripheralsMA addObject:peripheral];
+ [self.btRSSIMA        addObject:RSSI];
 
  [self.switchTV reloadData];
 }
@@ -296,6 +344,7 @@ NSUUID *uuid;
        self.switchA = objects;
        
        [self scanForPeripherals];
+       
        self.switchTV.hidden = NO;
        [self.switchTV reloadData];
        }
@@ -398,12 +447,9 @@ NSUUID *uuid;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
- if ([segue.identifier isEqualToString:@"hometoswitch"])
-    {
-    [self.btComm stopScan];
-     
-    ((SwitchVC *)[segue destinationViewController]).btComm = self.btComm;
-    }
+ [self.btComm stopScan];
+ 
+ if ([segue.identifier isEqualToString:@"hometoswitch"]) ((SwitchVC *)[segue destinationViewController]).btComm = self.btComm;
 }
 
 

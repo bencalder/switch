@@ -16,7 +16,7 @@
 
 @optional
 
-- (void)peripheralFound:(CBPeripheral *)peripheral;
+- (void)peripheralFound:(CBPeripheral *)peripheral withRSSI:(NSNumber *)RSSI;
 - (void)serialGATTCharValueUpdated:(NSString *)UUID value:(NSData *)data;
 - (void)setConnect;
 - (void)setDisconnect;
@@ -24,6 +24,7 @@
 - (void)didConnect:(CBPeripheral *)peripheral;
 - (void)didDisconnect:(CBPeripheral *)peripheral;
 - (void)didDiscoverServices:(CBPeripheral *)peripheral;
+- (void)didReadRSSI:(NSNumber *)RSSI;
 
 @end
 

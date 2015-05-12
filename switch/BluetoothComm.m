@@ -41,7 +41,7 @@
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
- NSLog(@"Found peripheral with name: %@", peripheral.name);
+ NSLog(@"Found peripheral with name: %@ and UUID: %@ and signal strength: %@", peripheral.name, peripheral.identifier.UUIDString, RSSI);
  
  if (!self.peripherals)
     {
@@ -49,33 +49,37 @@
     
     for (int i = 0; i < self.peripherals.count; i++)
         {
-        [self.delegate peripheralFound:peripheral];
+        [self.delegate peripheralFound:peripheral withRSSI:RSSI];
         }
     }
  
  if (peripheral.identifier.UUIDString == NULL) return;
 
  if (peripheral.name.length < 1) return;
-        // Add the new peripheral to the peripherals array
- for (int i = 0; i < self.peripherals.count; i++)
+ 
+ for (int i = 0; i < self.peripherals.count; i++) // Add the new peripheral to the peripherals array
      {
      CBPeripheral *p = [self.peripherals objectAtIndex:i];
+     
      if (p.identifier.UUIDString == NULL) continue;
+     
      CFUUIDBytes b1 = CFUUIDGetUUIDBytes((__bridge CFUUIDRef )p.identifier);
+     
      CFUUIDBytes b2 = CFUUIDGetUUIDBytes((__bridge CFUUIDRef )peripheral.identifier);
+     
      if (memcmp(&b1, &b2, 16) == 0)
         {
-        // these are the same, and replace the old peripheral information
-        [self.peripherals replaceObjectAtIndex:i withObject:peripheral];
+        [self.peripherals replaceObjectAtIndex:i withObject:peripheral]; // these are the same, and replace the old peripheral information
+        
         NSLog(@"Duplicated peripheral found");
-        //[delegate peripheralFound: peripheral];
-        return;
+        
+        return;  //[delegate peripheralFound: peripheral];
         }
-      }
+     }
       
  NSLog(@"Peripheral added to array");
  [self.peripherals addObject:peripheral];
- [self.delegate peripheralFound:peripheral];
+ [self.delegate peripheralFound:peripheral withRSSI:RSSI];
     
  return;
 }
@@ -164,6 +168,7 @@
 {
  self.rssiN = RSSI;
  NSLog(@"RSSI : %d",[RSSI intValue]);
+ [self.delegate didReadRSSI:RSSI];
 }
 
 
@@ -256,7 +261,7 @@
 }
 
 
--(void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error   // callback after a disconnection is successful
+- (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error   // callback after a disconnection is successful
 {
  NSLog(@"Disconnected from the active peripheral");
  
@@ -268,7 +273,7 @@
 }
 
 
--(void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
+- (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
  NSLog(@"failed to connect to peripheral %@: %@", [peripheral name], [error localizedDescription]);
 }
@@ -310,7 +315,6 @@
  if (!error)
     {
     NSLog(@"Updated notification state for characteristic with UUID %s on service with  UUID %s on peripheral with UUID %s\r\n", [self CBUUIDToString:characteristic.UUID], [self CBUUIDToString:characteristic.service.UUID], [self UUIDToString:(__bridge CFUUIDRef )peripheral.identifier]);
-    [self.delegate setConnect];
     }
  else
     {

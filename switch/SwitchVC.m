@@ -22,6 +22,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *switchNameL;
 
+@property (weak, nonatomic) IBOutlet UIImageView *signalStrengthIV;
+
 @property (strong, nonatomic) PFObject *switchPFO;
 
 @property (strong, nonatomic) NSArray *accessoriesA;
@@ -37,6 +39,8 @@
 @property (nonatomic) BOOL tableOpen;
 
 @property (strong, nonatomic) NSIndexPath *selectedAccessoryIP;
+
+@property (strong, nonatomic) NSTimer *rssiTimer;
 
 @end
 
@@ -69,7 +73,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
- return ((NSArray *)self.functionsMA[section]).count;
+BOOL on;
+
+ on = ((NSNumber *)self.relayStatusMA[section]).boolValue;
+ 
+ if (on) return ((NSArray *)self.functionsMA[section]).count;
+ else    return 1;
 }
 
 
@@ -77,12 +86,21 @@
 {
 UITableViewCell *cell;
 NSDictionary *function;
+BOOL on;
+NSInteger relayI;
  
  cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"subtitle"];
  
  function = self.functionsMA[indexPath.section][indexPath.row];
  
  cell.textLabel.text = function[@"onName"];
+ 
+ if (indexPath.row > 0) relayI = ((NSNumber *)self.relaysMA[indexPath.section][1]).integerValue - 1;
+ else                   relayI = ((NSNumber *)self.relaysMA[indexPath.section][0]).integerValue - 1;
+ 
+ on = ((NSNumber *)self.relayStatusMA[relayI]).boolValue;
+ 
+ if (on) [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 
  return cell;
 }
@@ -92,7 +110,6 @@ NSDictionary *function;
 {
 PFObject *function;
 NSNumber *momentary, *relayN;
-
 
  function = self.functionsMA[indexPath.section][indexPath.row];
  
@@ -120,22 +137,16 @@ NSString *str;
     {
     if ([command[@"relay"] isEqualToString:relay.stringValue])  // found the relay record
        {
-       if (on)   // relay is currently on, so turn it off
-          {
-          str = command[@"off"];
-          [[self.switchTV cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
-          }
-       else
-          {
-          str = command[@"on"];
-          [[self.switchTV cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
-          }
+       if (on) str = command[@"off"]; // relay is currently on, so turn it off
+       else    str = command[@"on"];
        }
     }
     
  [self sendSerialCommand:str];  // send the command
  
  [self.relayStatusMA replaceObjectAtIndex:idx withObject:[NSNumber numberWithBool:!on]];   //  update the relay to the new status
+ 
+ [self.switchTV reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
  
  if (delay.floatValue > 0.0f)
     {
@@ -158,8 +169,9 @@ NSString *str;
 
 - (void)sendSerialCommand:(NSString *)msg
 {
- [self.btComm.activePeripheral writeValue:[msg dataUsingEncoding:[NSString defaultCStringEncoding]] forCharacteristic:((CBService *)self.btComm.activePeripheral.services[0]).characteristics[0] type:CBCharacteristicWriteWithoutResponse];
+ NSLog(@"Characteristic: %@", ((CBService *)self.btComm.activePeripheral.services[0]).characteristics[0]);
 
+ [self.btComm.activePeripheral writeValue:[msg dataUsingEncoding:[NSString defaultCStringEncoding]] forCharacteristic:((CBService *)self.btComm.activePeripheral.services[0]).characteristics[0] type:CBCharacteristicWriteWithoutResponse];
 }
 
 
@@ -167,18 +179,14 @@ NSString *str;
 {
  [super viewDidLoad];
  
+ self.btComm.delegate = self;
+ 
  self.sharedData = [DataManager sharedDataManager];
  
  self.functionIdsMA = NSMutableArray.new;
  self.functionsMA   = NSMutableArray.new;
  self.relaysMA      = NSMutableArray.new;
  self.relayStatusMA = NSMutableArray.new;
-}
-
-
-- (void)viewDidAppear:(BOOL)animated
-{
- [super viewDidAppear:animated];
  
  self.switchPFO = self.sharedData.selectedSwitchPFO;
  
@@ -187,6 +195,16 @@ NSString *str;
  [self loadArrays];
  
  self.switchNameL.text = self.switchPFO[@"name"];
+ 
+ [self setNameAndNotifier];
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+ [super viewDidAppear:animated];
+ 
+ if (self.btComm.activePeripheral == nil) self.switchTV.userInteractionEnabled = NO;
  
  [self.switchTV reloadData];
 }
@@ -197,7 +215,7 @@ NSString *str;
  for (int i = 0; i < self.accessoriesA.count; i++)
     {
     [self.functionIdsMA addObject:self.accessoriesA[i][@"accessoryFunctions"]];
-    [self.relaysMA    addObject:self.accessoriesA[i][@"relays"]];
+    [self.relaysMA      addObject:self.accessoriesA[i][@"relays"]];
     }
  
  for (NSArray *ary in self.relaysMA)
@@ -227,6 +245,47 @@ NSString *str;
 }
 
 
+- (void)setNameAndNotifier
+{
+ if (self.btComm.activePeripheral != nil)
+    {
+    if ([self.sharedData.selectedSwitchPFO[@"uuid"] isEqualToString:self.btComm.activePeripheral.identifier.UUIDString])
+       {
+       self.switchNameL.text = [NSString stringWithFormat:@"%@\nCONNECTED", self.switchPFO[@"name"]];
+       [self readRSSI:nil];
+       self.switchTV.userInteractionEnabled = YES;
+       }
+    }
+}
+
+
+- (void)readRSSI:(NSTimer *)timer
+{
+ [self.btComm.activePeripheral readRSSI];
+}
+
+
+- (void)didReadRSSI:(NSNumber *)RSSI
+{
+NSString *str;
+
+ if (self.btComm.activePeripheral != nil) self.rssiTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(readRSSI:) userInfo:nil repeats:NO];
+ 
+ if (RSSI.intValue == 0) return;
+
+ if (RSSI.intValue > -60) str = @"icon_signalstrength_100.png";
+ else
+ if (RSSI.intValue > -70) str = @"icon_signalstrength_80.png";
+ else
+ if (RSSI.intValue > -80) str = @"icon_signalstrength_60.png";
+ else
+ if (RSSI.intValue > -90) str = @"icon_signalstrength_40.png";
+ else                     str = @"icon_signalstrength_20.png";
+ 
+ self.signalStrengthIV.image = [UIImage imageNamed:str];
+}
+
+
 - (void)didReceiveMemoryWarning
 {
  [super didReceiveMemoryWarning];
@@ -234,22 +293,35 @@ NSString *str;
 }
 
 
-- (void)setConnect
+- (void)peripheralFound:(CBPeripheral *)peripheral withRSSI:(NSNumber *)RSSI
 {
- NSLog(@"set connect switchVC");
+ NSLog(@"Peripheral found with RSSI in SwitchVC");
 }
 
 
 - (void)didConnect:(CBPeripheral *)peripheral
 {
- NSLog(@"Connected to peripheral in switch: %@", peripheral);
+ NSLog(@"Connected to peripheral in switchVC: %@", peripheral);
+ [self setNameAndNotifier];
+}
+
+
+- (void)didDisconnect:(CBPeripheral *)peripheral
+{
+ NSLog(@"Disconnected peripheral in SwitchVC");
+ self.switchNameL.text = [NSString stringWithFormat:@"%@\nNOT CONNECTED",self.switchPFO[@"name"]];
+ self.switchTV.userInteractionEnabled = NO;
+}
+
+
+- (void)didDiscoverServices:(CBPeripheral *)peripheral
+{
+
 }
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
- [self.btComm stopScan];
- 
  if ([segue.identifier isEqualToString:@"unwindtohomefromswitch"]) ((HomeVC *)[segue destinationViewController]).btComm = self.btComm;
  else
  if ([segue.identifier isEqualToString:@"switchtoswitchedit"]) ((SwitchEditVC *)[segue destinationViewController]).btComm = self.btComm;

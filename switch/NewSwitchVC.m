@@ -194,7 +194,11 @@ NSString *str;
 {
  if (indexPath.section == 0) // scan
     {
-    if (!self.scanCompleted) [self scanForPeripherals];
+    if (!self.scanCompleted)
+       {
+       [self.processingAI startAnimating];
+       [self scanForPeripherals];
+       }
     }
  else
  if (indexPath.section == 3) // accessory
@@ -316,7 +320,7 @@ NSString *str;
 }
 
 
-- (void)peripheralFound:(CBPeripheral *)peripheral
+- (void)peripheralFound:(CBPeripheral *)peripheral withRSSI:(NSNumber *)RSSI
 {
  NSLog(@"Found peripheral with UUID: %@", peripheral.identifier.UUIDString);
  
@@ -350,10 +354,10 @@ NSString *str;
        self.scanMessageS = @"Didn't find any new switches.";
        }
     else
-    if (self.peripheralMA.count == 1)  // found our one switch
+    if (self.peripheralMA.count == 1)  // found one switch
        {
        self.scanCompleted = YES;
-       self.scanMessageS = @"Found your switch!";
+       self.scanMessageS  = @"Found your switch!";
        [self.sectionTitlesMA addObject:@"Product ID"];
        
        [self.switchTV beginUpdates];
@@ -363,7 +367,7 @@ NSString *str;
        
        [self.productIdTF becomeFirstResponder];
        }
-    else self.scanMessageS = @"Found multiple switches. Engage can only add one switch at a time.";
+    else self.scanMessageS = @"Found multiple switches. Try again.";
      
     }
  else   // did not find a bluetooth device
@@ -539,6 +543,31 @@ NSString *str;
  
  [self scanForPeripherals];
  [self.processingAI startAnimating];
+}
+
+
+- (void)didConnect:(CBPeripheral *)peripheral
+{
+ NSLog(@"Connected to peripheral in NewSwitchVC: %@", peripheral);
+}
+
+
+- (void)didDiscoverServices:(CBPeripheral *)peripheral
+{
+ NSLog(@"Discovered services on peripheral: %@", peripheral);
+}
+
+
+- (void)didDisconnect:(CBPeripheral *)peripheral
+{
+ NSLog(@"Disconnected from peripheral: %@", peripheral);
+ 
+}
+
+
+- (void)didReadRSSI:(NSNumber *)RSSI
+{
+ NSLog(@"RSSI: %i", RSSI.intValue);
 }
 
 
