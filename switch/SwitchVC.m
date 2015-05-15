@@ -74,8 +74,11 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 BOOL on;
+NSInteger relay;
 
- on = ((NSNumber *)self.relayStatusMA[section]).boolValue;
+ relay = ((NSNumber *)self.relaysMA[section][0]).integerValue - 1;    //  find the "base" relay for each accessory and subtract 1 because relayStatusMA is zero relative
+
+ on = ((NSNumber *)self.relayStatusMA[relay]).boolValue;
  
  if (on) return ((NSArray *)self.functionsMA[section]).count;
  else    return 1;
@@ -91,11 +94,11 @@ NSInteger relayI;
  
  cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"subtitle"];
  
- function = self.functionsMA[indexPath.section][indexPath.row];
+ function = self.functionsMA[indexPath.section][indexPath.row];   //  self.functionsMA is an array of arrays of functions.
  
  cell.textLabel.text = function[@"onName"];
  
- if (indexPath.row > 0) relayI = ((NSNumber *)self.relaysMA[indexPath.section][1]).integerValue - 1;
+ if (indexPath.row > 0) relayI = ((NSNumber *)self.relaysMA[indexPath.section][1]).integerValue - 1;   //   if the function is anything other than "on" then
  else                   relayI = ((NSNumber *)self.relaysMA[indexPath.section][0]).integerValue - 1;
  
  on = ((NSNumber *)self.relayStatusMA[relayI]).boolValue;
@@ -130,6 +133,8 @@ NSNumber *num;
 NSString *str;
 
  idx = relay.integerValue - 1;   // relayStatusMA is zero relative, so subtract 1 from the relay number
+ 
+ NSLog(@"Relay number: %i  Relay index: %li", relay.intValue, (long)idx);
 
  on = ((NSNumber *)self.relayStatusMA[idx]).boolValue;   //  get the current setting of the relay
 
@@ -141,7 +146,8 @@ NSString *str;
        else    str = command[@"on"];
        }
     }
-    
+ 
+ NSLog(@"Sent command: %@", str);
  [self sendSerialCommand:str];  // send the command
  
  [self.relayStatusMA replaceObjectAtIndex:idx withObject:[NSNumber numberWithBool:!on]];   //  update the relay to the new status
