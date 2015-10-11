@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F6E5ACC44DCC26165C4CA97 /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C97A2B57B58273CABC6B6DA /* ATConnect.h */; };
+		1FEE96253574BDC6496EFA38 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95BC1F0D19A6AF82BB815DB5 /* StoreKit.framework */; };
+		20FDEB7291DC41A5781A50B5 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3EBBAB03CEC38B52F93A9B7 /* CoreData.framework */; };
+		20FF7CCE0D3FBDCC62E52EBF /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AD1B6F33823960FD4700E6F /* libApptentiveConnect.a */; };
+		446CE7D843DF3CFF1E4745D5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 180BDACFC3FF723B1D5D55B6 /* UIKit.framework */; };
+		4922FA949EF121D12C08881B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E64CF7AFECED52495F44211 /* SystemConfiguration.framework */; };
+		4CA436E7320E6235D2CB402B /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D61B8D7F3DD78602C4F0CB0E /* README.md */; };
 		5300FD631AF1AD5F004F0889 /* NewSwitchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5300FD621AF1AD5F004F0889 /* NewSwitchVC.m */; };
 		53177D911AE71B8A00056724 /* HomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53177D901AE71B8A00056724 /* HomeVC.m */; };
 		53177D9A1AE8A75700056724 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53177D991AE8A75700056724 /* DataManager.m */; };
@@ -30,17 +37,27 @@
 		53412D551ACC9737009CB1AB /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53412D531ACC9737009CB1AB /* LaunchScreen.xib */; };
 		53412D611ACC9737009CB1AB /* switchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53412D601ACC9737009CB1AB /* switchTests.m */; };
 		53412D6E1ACCA268009CB1AB /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53412D6D1ACCA268009CB1AB /* CoreBluetooth.framework */; };
-		534B4D741BC9C11900AF67E7 /* EngageConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D731BC9C11900AF67E7 /* EngageConnector.m */; settings = {ASSET_TAGS = (); }; };
-		534B4D771BC9C24800AF67E7 /* EngageFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D761BC9C24800AF67E7 /* EngageFunction.m */; settings = {ASSET_TAGS = (); }; };
-		534B4D7A1BC9C2E500AF67E7 /* EngageSerialCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D791BC9C2E500AF67E7 /* EngageSerialCommand.m */; settings = {ASSET_TAGS = (); }; };
-		534B4D7D1BC9CB1F00AF67E7 /* EngageAccessory.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D7C1BC9CB1F00AF67E7 /* EngageAccessory.m */; settings = {ASSET_TAGS = (); }; };
-		5362594A1BC9AD4C00038B13 /* EngageUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 536259491BC9AD4C00038B13 /* EngageUnit.m */; settings = {ASSET_TAGS = (); }; };
+		534B4D741BC9C11900AF67E7 /* EngageConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D731BC9C11900AF67E7 /* EngageConnector.m */; };
+		534B4D771BC9C24800AF67E7 /* EngageFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D761BC9C24800AF67E7 /* EngageFunction.m */; };
+		534B4D7A1BC9C2E500AF67E7 /* EngageSerialCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D791BC9C2E500AF67E7 /* EngageSerialCommand.m */; };
+		534B4D7D1BC9CB1F00AF67E7 /* EngageAccessory.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D7C1BC9CB1F00AF67E7 /* EngageAccessory.m */; };
+		5362594A1BC9AD4C00038B13 /* EngageUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 536259491BC9AD4C00038B13 /* EngageUnit.m */; };
 		537DF3B11AF04AC6005BB1EB /* SwitchEditVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 537DF3B01AF04AC6005BB1EB /* SwitchEditVC.m */; };
 		53A73C771B37C46D00424266 /* Accessory.json in Resources */ = {isa = PBXBuildFile; fileRef = 53A73C731B37C46D00424266 /* Accessory.json */; };
 		53A73C781B37C46D00424266 /* AccessoryFunction.json in Resources */ = {isa = PBXBuildFile; fileRef = 53A73C741B37C46D00424266 /* AccessoryFunction.json */; };
 		53A73C7A1B37C46D00424266 /* Connector.json in Resources */ = {isa = PBXBuildFile; fileRef = 53A73C761B37C46D00424266 /* Connector.json */; };
 		53A73C7C1B37C70B00424266 /* SerialCommand.json in Resources */ = {isa = PBXBuildFile; fileRef = 53A73C7B1B37C70B00424266 /* SerialCommand.json */; };
 		53E825A71ACE073400ADD347 /* BluetoothComm.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E825A61ACE073400ADD347 /* BluetoothComm.m */; };
+		5B81003DCE8361AE635755DB /* LICENSE.txt in Sources */ = {isa = PBXBuildFile; fileRef = 6E98CE155F3E8C4D4633C354 /* LICENSE.txt */; };
+		5BE6A696C09DDFA897138D72 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85963531BC476259C1402DDD /* Accelerate.framework */; };
+		688863C4B1D62ECBD476BBC4 /* ApptentiveResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6A347BAE06EB44B48F6A943D /* ApptentiveResources.bundle */; };
+		7215AE6C6171ADB330148009 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B5CCB7C7BFF8C53AD817C26 /* CoreGraphics.framework */; };
+		9D85BE64943F41255B9DCD00 /* CHANGELOG.md in Sources */ = {isa = PBXBuildFile; fileRef = 4AC7C17BF768B5DDFF1F343A /* CHANGELOG.md */; };
+		A79AFB843BFDF1C67A38CE93 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 954E69E59EA18C3D7B03D880 /* QuartzCore.framework */; };
+		D213EAA6490A7E4818FB16C3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 498185214222B58E9B26436A /* Foundation.framework */; };
+		D5D1AB42734E9BA862FE0AB3 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5ACCAC00E294E082EB2591D /* CoreText.framework */; };
+		D92E10F32C7C0D35CD705CFA /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76D78D8FAE602DCEF8CFB391 /* AssetsLibrary.framework */; };
+		E6F2D50783F3488FE3BBE73D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 725CF29F22673EF1E601DE62 /* CoreTelephony.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +71,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		180BDACFC3FF723B1D5D55B6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		1C97A2B57B58273CABC6B6DA /* ATConnect.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = "Vendor/apptentive_ios_sdk-2.0.2/ATConnect.h"; sourceTree = "<group>"; };
+		498185214222B58E9B26436A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		4AC7C17BF768B5DDFF1F343A /* CHANGELOG.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = "Vendor/apptentive_ios_sdk-2.0.2/CHANGELOG.md"; sourceTree = "<group>"; };
 		5300FD611AF1AD5F004F0889 /* NewSwitchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewSwitchVC.h; sourceTree = "<group>"; };
 		5300FD621AF1AD5F004F0889 /* NewSwitchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewSwitchVC.m; sourceTree = "<group>"; };
 		53177D8F1AE71B8A00056724 /* HomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeVC.h; sourceTree = "<group>"; };
@@ -103,6 +124,19 @@
 		53A73C7B1B37C70B00424266 /* SerialCommand.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = SerialCommand.json; sourceTree = "<group>"; };
 		53E825A51ACE073400ADD347 /* BluetoothComm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothComm.h; sourceTree = "<group>"; };
 		53E825A61ACE073400ADD347 /* BluetoothComm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothComm.m; sourceTree = "<group>"; };
+		6A347BAE06EB44B48F6A943D /* ApptentiveResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = ApptentiveResources.bundle; path = "Vendor/apptentive_ios_sdk-2.0.2/ApptentiveResources.bundle"; sourceTree = "<group>"; };
+		6E64CF7AFECED52495F44211 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
+		6E98CE155F3E8C4D4633C354 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE.txt; path = "Vendor/apptentive_ios_sdk-2.0.2/LICENSE.txt"; sourceTree = "<group>"; };
+		725CF29F22673EF1E601DE62 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreTelephony.framework; sourceTree = DEVELOPER_DIR; };
+		76D78D8FAE602DCEF8CFB391 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/AssetsLibrary.framework; sourceTree = DEVELOPER_DIR; };
+		7AD1B6F33823960FD4700E6F /* libApptentiveConnect.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libApptentiveConnect.a; path = "Vendor/apptentive_ios_sdk-2.0.2/libApptentiveConnect.a"; sourceTree = "<group>"; };
+		85963531BC476259C1402DDD /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
+		954E69E59EA18C3D7B03D880 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		95BC1F0D19A6AF82BB815DB5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		9B5CCB7C7BFF8C53AD817C26 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		A3EBBAB03CEC38B52F93A9B7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
+		D61B8D7F3DD78602C4F0CB0E /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = "Vendor/apptentive_ios_sdk-2.0.2/README.md"; sourceTree = "<group>"; };
+		F5ACCAC00E294E082EB2591D /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +158,18 @@
 				53412D6E1ACCA268009CB1AB /* CoreBluetooth.framework in Frameworks */,
 				53188E2F1AE6F79500AFB44C /* Parse.framework in Frameworks */,
 				53188E2E1AE6F79500AFB44C /* Bolts.framework in Frameworks */,
+				20FF7CCE0D3FBDCC62E52EBF /* libApptentiveConnect.a in Frameworks */,
+				5BE6A696C09DDFA897138D72 /* Accelerate.framework in Frameworks */,
+				D92E10F32C7C0D35CD705CFA /* AssetsLibrary.framework in Frameworks */,
+				20FDEB7291DC41A5781A50B5 /* CoreData.framework in Frameworks */,
+				D5D1AB42734E9BA862FE0AB3 /* CoreText.framework in Frameworks */,
+				7215AE6C6171ADB330148009 /* CoreGraphics.framework in Frameworks */,
+				E6F2D50783F3488FE3BBE73D /* CoreTelephony.framework in Frameworks */,
+				D213EAA6490A7E4818FB16C3 /* Foundation.framework in Frameworks */,
+				A79AFB843BFDF1C67A38CE93 /* QuartzCore.framework in Frameworks */,
+				1FEE96253574BDC6496EFA38 /* StoreKit.framework in Frameworks */,
+				4922FA949EF121D12C08881B /* SystemConfiguration.framework in Frameworks */,
+				446CE7D843DF3CFF1E4745D5 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +183,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0CC90717C32B1791957C0BDE /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				6A347BAE06EB44B48F6A943D /* ApptentiveResources.bundle */,
+				1C97A2B57B58273CABC6B6DA /* ATConnect.h */,
+				4AC7C17BF768B5DDFF1F343A /* CHANGELOG.md */,
+				7AD1B6F33823960FD4700E6F /* libApptentiveConnect.a */,
+				6E98CE155F3E8C4D4633C354 /* LICENSE.txt */,
+				D61B8D7F3DD78602C4F0CB0E /* README.md */,
+			);
+			name = Vendor;
+			sourceTree = "<group>";
+		};
 		53412D381ACC9737009CB1AB = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +203,7 @@
 				53412D5D1ACC9737009CB1AB /* switchTests */,
 				53412D421ACC9737009CB1AB /* Products */,
 				53FD5BEE1AE9C1AC004B0A6F /* Frameworks */,
+				0CC90717C32B1791957C0BDE /* Vendor */,
 			);
 			sourceTree = "<group>";
 		};
@@ -236,11 +296,41 @@
 				53188E2C1AE6F79500AFB44C /* Bolts.framework */,
 				53188E2D1AE6F79500AFB44C /* Parse.framework */,
 				53412D6D1ACCA268009CB1AB /* CoreBluetooth.framework */,
+				9B705049F74C5A961EEDCCB7 /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9B705049F74C5A961EEDCCB7 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				85963531BC476259C1402DDD /* Accelerate.framework */,
+				76D78D8FAE602DCEF8CFB391 /* AssetsLibrary.framework */,
+				A3EBBAB03CEC38B52F93A9B7 /* CoreData.framework */,
+				F5ACCAC00E294E082EB2591D /* CoreText.framework */,
+				9B5CCB7C7BFF8C53AD817C26 /* CoreGraphics.framework */,
+				725CF29F22673EF1E601DE62 /* CoreTelephony.framework */,
+				498185214222B58E9B26436A /* Foundation.framework */,
+				954E69E59EA18C3D7B03D880 /* QuartzCore.framework */,
+				95BC1F0D19A6AF82BB815DB5 /* StoreKit.framework */,
+				6E64CF7AFECED52495F44211 /* SystemConfiguration.framework */,
+				180BDACFC3FF723B1D5D55B6 /* UIKit.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		92DEF2ABF9CE6AB2E5A9630B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F6E5ACC44DCC26165C4CA97 /* ATConnect.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		53412D401ACC9737009CB1AB /* switch */ = {
@@ -250,6 +340,7 @@
 				53412D3D1ACC9737009CB1AB /* Sources */,
 				53412D3E1ACC9737009CB1AB /* Frameworks */,
 				53412D3F1ACC9737009CB1AB /* Resources */,
+				92DEF2ABF9CE6AB2E5A9630B /* Headers */,
 			);
 			buildRules = (
 			);
@@ -328,6 +419,7 @@
 				53A73C771B37C46D00424266 /* Accessory.json in Resources */,
 				53412D521ACC9737009CB1AB /* Images.xcassets in Resources */,
 				53A73C781B37C46D00424266 /* AccessoryFunction.json in Resources */,
+				688863C4B1D62ECBD476BBC4 /* ApptentiveResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +449,9 @@
 				537DF3B11AF04AC6005BB1EB /* SwitchEditVC.m in Sources */,
 				5300FD631AF1AD5F004F0889 /* NewSwitchVC.m in Sources */,
 				53E825A71ACE073400ADD347 /* BluetoothComm.m in Sources */,
+				9D85BE64943F41255B9DCD00 /* CHANGELOG.md in Sources */,
+				5B81003DCE8361AE635755DB /* LICENSE.txt in Sources */,
+				4CA436E7320E6235D2CB402B /* README.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,6 +582,14 @@
 				);
 				INFOPLIST_FILE = switch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor/apptentive_ios_sdk-2.0.2",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -504,6 +607,14 @@
 				);
 				INFOPLIST_FILE = switch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor/apptentive_ios_sdk-2.0.2",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

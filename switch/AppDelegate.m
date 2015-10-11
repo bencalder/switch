@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
+#import "ATConnect.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +19,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	/*** Apptentive added by Config.io ***/
+	[ATConnect sharedConnection].apiKey = @"8273e9d2fa2d15bce45157bfdd37bfebc8af1fd86815ca02ea767bd378448e1b";
  // Override point for customization after application launch.
  [Parse enableLocalDatastore];
  
