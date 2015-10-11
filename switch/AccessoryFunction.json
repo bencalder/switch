@@ -1,0 +1,26 @@
+[
+	{
+        "createdAt": "2015-04-24T04:45:23.917Z",
+        "momentary": false,
+        "objectId": "Rg6LiBUY8X",
+        "onName": "On",
+        "signalDuration": 0,
+        "updatedAt": "2015-04-25T03:10:44.476Z"
+    },
+	{
+        "createdAt": "2015-04-24T05:48:24.201Z",
+        "momentary": true,
+        "objectId": "C28iwpkZoI",
+        "onName": "Medium",
+        "signalDuration": 0.2,
+        "updatedAt": "2015-04-25T03:10:40.788Z"
+    },
+	{
+        "createdAt": "2015-04-24T05:47:51.181Z",
+        "momentary": true,
+        "objectId": "Gc4RxtHHoC",
+        "onName": "Strobe",
+        "signalDuration": 2.5,
+        "updatedAt": "2015-04-25T03:10:42.349Z"
+    }
+]

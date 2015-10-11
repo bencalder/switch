@@ -1,0 +1,512 @@
+[
+	{
+        "brand": "KC Hilites",
+        "category": "HID",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.187Z",
+        "currentDraw": 5.83,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "KC-POD",
+        "objectId": "3rwsxQVNoC",
+        "partNumber": "9638",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:09.188Z"
+    },
+	{
+        "brand": "Baja Designs",
+        "category": "HID",
+        "connectors": [
+            {
+                "objectId": "1pvObn3kxX"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.186Z",
+        "currentDraw": 3.8,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "PreRunner 6\" Spot",
+        "objectId": "VR0VdCFjBP",
+        "partNumber": "61-3265",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:13.278Z"
+    },
+	{
+        "brand": "ARB",
+        "category": "9.5\" Round LED",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.185Z",
+        "currentDraw": 6.25,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "Intensity Spot",
+        "objectId": "j3FPvSnvXh",
+        "partNumber": "AR32S",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:14.106Z"
+    },
+	{
+        "brand": "Rigid Industries",
+        "category": "50\" LED full size bar",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.184Z",
+        "currentDraw": 21.52,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "E2 50\" Combo",
+        "objectId": "Nx4A3Ny4Ft",
+        "partNumber": "15231",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:15.228Z"
+    },
+	{
+        "brand": "VisionX",
+        "category": "50\" LED full size bar",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.183Z",
+        "currentDraw": 37.5,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "Xmitter Prime Xtreme Single 50\" 10º",
+        "objectId": "EKhS2KImX8",
+        "partNumber": "9887036",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:16.249Z"
+    },
+	{
+        "brand": "KC Hilites",
+        "category": "50\" LED full size bar",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.181Z",
+        "currentDraw": 25,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "C Series 50\"",
+        "objectId": "nqMeGasgIW",
+        "partNumber": "338",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:18.202Z"
+    },
+	{
+        "brand": "VisionX",
+        "category": "3\" LED cube",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.179Z",
+        "currentDraw": 0.83,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "Optimus Single 10º",
+        "objectId": "EpGho12lTI",
+        "partNumber": "9123882",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:19.039Z"
+    },
+	{
+        "brand": "Hella",
+        "category": "3\" LED cube",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.178Z",
+        "currentDraw": 1.33,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "Optilux Cube Driving",
+        "objectId": "mDQP5s3gkE",
+        "partNumber": "H71020121",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:19.901Z"
+    },
+	{
+        "brand": "Rigid Industries",
+        "category": "3\" LED cube",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.177Z",
+        "currentDraw": 2.5,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "D2 Driving",
+        "objectId": "IrvTiqs4qX",
+        "partNumber": "50131",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:20.641Z"
+    },
+	{
+        "brand": "KC Hilites",
+        "category": "3\" LED cube",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.176Z",
+        "currentDraw": 1.67,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "LZR LED Cube",
+        "objectId": "DMuR4NhmDS",
+        "partNumber": "310",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:21.443Z"
+    },
+	{
+        "brand": "Baja Designs",
+        "category": "3\" LED cube",
+        "connectors": [
+            {
+                "objectId": "1pvObn3kxX"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.175Z",
+        "currentDraw": 3.5,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "Squadron Pro",
+        "objectId": "QMKfKkVqKA",
+        "partNumber": "49-7803",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:22.311Z"
+    },
+	{
+        "brand": "KC Hilites",
+        "category": "20\" LED single row bar",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.174Z",
+        "currentDraw": 8.33,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "Flex Array 20\"",
+        "objectId": "H4W3qPfSxI",
+        "partNumber": "274",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:23.117Z"
+    },
+	{
+        "brand": "VisionX",
+        "category": "20\" LED single row bar",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.173Z",
+        "currentDraw": 6.2,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "Xmitter Lo Pro Xtreme 20\" 10º",
+        "objectId": "ret84nsrEJ",
+        "partNumber": "9114613",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:24.018Z"
+    },
+	{
+        "brand": "Baja Designs",
+        "category": "20\" LED single row bar",
+        "connectors": [
+            {
+                "objectId": "S8e5Di6Y2E"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.171Z",
+        "currentDraw": 7,
+        "functions": [
+            "Rg6LiBUY8X",
+            "C28iwpkZoI",
+            "Gc4RxtHHoC"
+        ],
+        "model": "Stealth 20\" Driving/Combo",
+        "objectId": "M39YNFIrNT",
+        "partNumber": "47-2003",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:39.356Z"
+    },
+	{
+        "brand": "Rigid Industries",
+        "category": "20\" LED single row bar",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.170Z",
+        "currentDraw": 7.61,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "SR2 20\" Driving",
+        "objectId": "vrFxA7eq4p",
+        "partNumber": "92161",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:25.875Z"
+    },
+	{
+        "brand": "Baja Designs",
+        "category": "20\" LED full size bar",
+        "connectors": [
+            {
+                "objectId": "S8e5Di6Y2E"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.169Z",
+        "currentDraw": 10.5,
+        "functions": [
+            "Rg6LiBUY8X",
+            "C28iwpkZoI",
+            "Gc4RxtHHoC"
+        ],
+        "model": "OnX6 20\" Driving/Combo",
+        "objectId": "Yy7EQPG971",
+        "partNumber": "45-2003",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:47.261Z"
+    },
+	{
+        "brand": "Rigid Industries",
+        "category": "20\" LED full size bar",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.168Z",
+        "currentDraw": 11.74,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "E2 20\" Driving",
+        "objectId": "jDOcWIJjjn",
+        "partNumber": "12161",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:27.400Z"
+    },
+	{
+        "brand": "VisionX",
+        "category": "20\" LED full size bar",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.167Z",
+        "currentDraw": 15,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "Xmitter Prime Xtreme Single 20\" 10º",
+        "objectId": "5qqsdlfwYw",
+        "partNumber": "9117041",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:28.155Z"
+    },
+	{
+        "brand": "KC Hilites",
+        "category": "20\" LED full size bar",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.166Z",
+        "currentDraw": 10,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "C Series 20\"",
+        "objectId": "1pYqmxiKFT",
+        "partNumber": "335",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:28.868Z"
+    },
+	{
+        "brand": "Baja Designs",
+        "category": "50\" LED full size bar",
+        "connectors": [
+            {
+                "objectId": "S8e5Di6Y2E"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.182Z",
+        "currentDraw": 26.25,
+        "functions": [
+            "Rg6LiBUY8X",
+            "C28iwpkZoI",
+            "Gc4RxtHHoC"
+        ],
+        "model": "OnX6 50\" Driving/Combo",
+        "objectId": "zdxsDOgrOQ",
+        "partNumber": "45-5003",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:51.918Z"
+    },
+	{
+        "brand": "Hella",
+        "category": "20\" LED full size bar",
+        "connectors": [
+            {
+                "objectId": "ZzQ5PxB5pn"
+            }
+        ],
+        "createdAt": "2015-04-24T00:50:34.165Z",
+        "currentDraw": 10,
+        "functions": [
+            "Rg6LiBUY8X"
+        ],
+        "model": "Optilux Light Bar 40 LED 22\"",
+        "objectId": "adnygXPubc",
+        "partNumber": "H71020451",
+        "primaryFunction": {
+            "__type": "Pointer",
+            "className": "AccessoryFunction",
+            "objectId": "Rg6LiBUY8X"
+        },
+        "type": "light",
+        "updatedAt": "2015-05-05T00:36:31.417Z"
+    }
+] 

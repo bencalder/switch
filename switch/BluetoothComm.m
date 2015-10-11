@@ -28,14 +28,15 @@
  if ([self.manager state] != CBCentralManagerStatePoweredOn)
     {
     NSLog(@"CoreBluetooth is not correctly initialized!");
+    
+    [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(findPeripheralsWithTimeout:) userInfo:nil repeats:NO];
+    
     return;
     }
     
  [NSTimer scheduledTimerWithTimeInterval:(float)timeout target:self selector:@selector(scanTimer:) userInfo:nil repeats:NO];
  
  [self.manager scanForPeripheralsWithServices:[NSArray arrayWithObject:[CBUUID UUIDWithString:@"0xFFE0"]] options:0];
- 
- return;
 }
 
 
@@ -245,7 +246,7 @@
 {
  switch(centralManager.state)
     {
-    case CBCentralManagerStatePoweredOn    : //[self.delegate scanForPeripherals];
+    case CBCentralManagerStatePoweredOn    : // [self.delegate scanForPeripherals];
          break;
     case CBCentralManagerStatePoweredOff   :
          break;

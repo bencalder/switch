@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		5300FD631AF1AD5F004F0889 /* NewSwitchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5300FD621AF1AD5F004F0889 /* NewSwitchVC.m */; };
 		53177D911AE71B8A00056724 /* HomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53177D901AE71B8A00056724 /* HomeVC.m */; };
-		53177D971AE744AF00056724 /* CreateSwitchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53177D961AE744AF00056724 /* CreateSwitchVC.m */; };
 		53177D9A1AE8A75700056724 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53177D991AE8A75700056724 /* DataManager.m */; };
 		53188E2E1AE6F79500AFB44C /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53188E2C1AE6F79500AFB44C /* Bolts.framework */; };
 		53188E2F1AE6F79500AFB44C /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53188E2D1AE6F79500AFB44C /* Parse.framework */; };
@@ -31,9 +30,17 @@
 		53412D551ACC9737009CB1AB /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53412D531ACC9737009CB1AB /* LaunchScreen.xib */; };
 		53412D611ACC9737009CB1AB /* switchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53412D601ACC9737009CB1AB /* switchTests.m */; };
 		53412D6E1ACCA268009CB1AB /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53412D6D1ACCA268009CB1AB /* CoreBluetooth.framework */; };
+		534B4D741BC9C11900AF67E7 /* EngageConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D731BC9C11900AF67E7 /* EngageConnector.m */; settings = {ASSET_TAGS = (); }; };
+		534B4D771BC9C24800AF67E7 /* EngageFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D761BC9C24800AF67E7 /* EngageFunction.m */; settings = {ASSET_TAGS = (); }; };
+		534B4D7A1BC9C2E500AF67E7 /* EngageSerialCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D791BC9C2E500AF67E7 /* EngageSerialCommand.m */; settings = {ASSET_TAGS = (); }; };
+		534B4D7D1BC9CB1F00AF67E7 /* EngageAccessory.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B4D7C1BC9CB1F00AF67E7 /* EngageAccessory.m */; settings = {ASSET_TAGS = (); }; };
+		5362594A1BC9AD4C00038B13 /* EngageUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 536259491BC9AD4C00038B13 /* EngageUnit.m */; settings = {ASSET_TAGS = (); }; };
 		537DF3B11AF04AC6005BB1EB /* SwitchEditVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 537DF3B01AF04AC6005BB1EB /* SwitchEditVC.m */; };
+		53A73C771B37C46D00424266 /* Accessory.json in Resources */ = {isa = PBXBuildFile; fileRef = 53A73C731B37C46D00424266 /* Accessory.json */; };
+		53A73C781B37C46D00424266 /* AccessoryFunction.json in Resources */ = {isa = PBXBuildFile; fileRef = 53A73C741B37C46D00424266 /* AccessoryFunction.json */; };
+		53A73C7A1B37C46D00424266 /* Connector.json in Resources */ = {isa = PBXBuildFile; fileRef = 53A73C761B37C46D00424266 /* Connector.json */; };
+		53A73C7C1B37C70B00424266 /* SerialCommand.json in Resources */ = {isa = PBXBuildFile; fileRef = 53A73C7B1B37C70B00424266 /* SerialCommand.json */; };
 		53E825A71ACE073400ADD347 /* BluetoothComm.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E825A61ACE073400ADD347 /* BluetoothComm.m */; };
-		53FD5BFA1AEB311C004B0A6F /* SwitchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53FD5BF91AEB311C004B0A6F /* SwitchVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +58,6 @@
 		5300FD621AF1AD5F004F0889 /* NewSwitchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewSwitchVC.m; sourceTree = "<group>"; };
 		53177D8F1AE71B8A00056724 /* HomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeVC.h; sourceTree = "<group>"; };
 		53177D901AE71B8A00056724 /* HomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeVC.m; sourceTree = "<group>"; };
-		53177D951AE744AF00056724 /* CreateSwitchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateSwitchVC.h; sourceTree = "<group>"; };
-		53177D961AE744AF00056724 /* CreateSwitchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateSwitchVC.m; sourceTree = "<group>"; };
 		53177D981AE8A75700056724 /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		53177D991AE8A75700056724 /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
 		53188E2C1AE6F79500AFB44C /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
@@ -80,12 +85,24 @@
 		53412D5F1ACC9737009CB1AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53412D601ACC9737009CB1AB /* switchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = switchTests.m; sourceTree = "<group>"; };
 		53412D6D1ACCA268009CB1AB /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		534B4D721BC9C11900AF67E7 /* EngageConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngageConnector.h; sourceTree = "<group>"; };
+		534B4D731BC9C11900AF67E7 /* EngageConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngageConnector.m; sourceTree = "<group>"; };
+		534B4D751BC9C24800AF67E7 /* EngageFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngageFunction.h; sourceTree = "<group>"; };
+		534B4D761BC9C24800AF67E7 /* EngageFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngageFunction.m; sourceTree = "<group>"; };
+		534B4D781BC9C2E500AF67E7 /* EngageSerialCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngageSerialCommand.h; sourceTree = "<group>"; };
+		534B4D791BC9C2E500AF67E7 /* EngageSerialCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngageSerialCommand.m; sourceTree = "<group>"; };
+		534B4D7B1BC9CB1F00AF67E7 /* EngageAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngageAccessory.h; sourceTree = "<group>"; };
+		534B4D7C1BC9CB1F00AF67E7 /* EngageAccessory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngageAccessory.m; sourceTree = "<group>"; };
+		536259481BC9AD4C00038B13 /* EngageUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngageUnit.h; sourceTree = "<group>"; };
+		536259491BC9AD4C00038B13 /* EngageUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngageUnit.m; sourceTree = "<group>"; };
 		537DF3AF1AF04AC6005BB1EB /* SwitchEditVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchEditVC.h; sourceTree = "<group>"; };
 		537DF3B01AF04AC6005BB1EB /* SwitchEditVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchEditVC.m; sourceTree = "<group>"; };
+		53A73C731B37C46D00424266 /* Accessory.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Accessory.json; sourceTree = "<group>"; };
+		53A73C741B37C46D00424266 /* AccessoryFunction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AccessoryFunction.json; sourceTree = "<group>"; };
+		53A73C761B37C46D00424266 /* Connector.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Connector.json; sourceTree = "<group>"; };
+		53A73C7B1B37C70B00424266 /* SerialCommand.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = SerialCommand.json; sourceTree = "<group>"; };
 		53E825A51ACE073400ADD347 /* BluetoothComm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothComm.h; sourceTree = "<group>"; };
 		53E825A61ACE073400ADD347 /* BluetoothComm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothComm.m; sourceTree = "<group>"; };
-		53FD5BF81AEB311C004B0A6F /* SwitchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchVC.h; sourceTree = "<group>"; };
-		53FD5BF91AEB311C004B0A6F /* SwitchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,18 +159,18 @@
 		53412D431ACC9737009CB1AB /* switch */ = {
 			isa = PBXGroup;
 			children = (
+				53A73C7B1B37C70B00424266 /* SerialCommand.json */,
+				53A73C731B37C46D00424266 /* Accessory.json */,
+				53A73C741B37C46D00424266 /* AccessoryFunction.json */,
+				53A73C761B37C46D00424266 /* Connector.json */,
 				53412D481ACC9737009CB1AB /* AppDelegate.h */,
 				53412D491ACC9737009CB1AB /* AppDelegate.m */,
 				53177D8F1AE71B8A00056724 /* HomeVC.h */,
 				53177D901AE71B8A00056724 /* HomeVC.m */,
 				5300FD611AF1AD5F004F0889 /* NewSwitchVC.h */,
 				5300FD621AF1AD5F004F0889 /* NewSwitchVC.m */,
-				53FD5BF81AEB311C004B0A6F /* SwitchVC.h */,
-				53FD5BF91AEB311C004B0A6F /* SwitchVC.m */,
 				537DF3AF1AF04AC6005BB1EB /* SwitchEditVC.h */,
 				537DF3B01AF04AC6005BB1EB /* SwitchEditVC.m */,
-				53177D951AE744AF00056724 /* CreateSwitchVC.h */,
-				53177D961AE744AF00056724 /* CreateSwitchVC.m */,
 				53E825A51ACE073400ADD347 /* BluetoothComm.h */,
 				53E825A61ACE073400ADD347 /* BluetoothComm.m */,
 				53412D4E1ACC9737009CB1AB /* Main.storyboard */,
@@ -162,6 +179,16 @@
 				53177D981AE8A75700056724 /* DataManager.h */,
 				53177D991AE8A75700056724 /* DataManager.m */,
 				53412D441ACC9737009CB1AB /* Supporting Files */,
+				536259481BC9AD4C00038B13 /* EngageUnit.h */,
+				536259491BC9AD4C00038B13 /* EngageUnit.m */,
+				534B4D721BC9C11900AF67E7 /* EngageConnector.h */,
+				534B4D731BC9C11900AF67E7 /* EngageConnector.m */,
+				534B4D751BC9C24800AF67E7 /* EngageFunction.h */,
+				534B4D761BC9C24800AF67E7 /* EngageFunction.m */,
+				534B4D781BC9C2E500AF67E7 /* EngageSerialCommand.h */,
+				534B4D791BC9C2E500AF67E7 /* EngageSerialCommand.m */,
+				534B4D7B1BC9CB1F00AF67E7 /* EngageAccessory.h */,
+				534B4D7C1BC9CB1F00AF67E7 /* EngageAccessory.m */,
 			);
 			path = switch;
 			sourceTree = "<group>";
@@ -295,8 +322,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				53412D501ACC9737009CB1AB /* Main.storyboard in Resources */,
+				53A73C7C1B37C70B00424266 /* SerialCommand.json in Resources */,
+				53A73C7A1B37C46D00424266 /* Connector.json in Resources */,
 				53412D551ACC9737009CB1AB /* LaunchScreen.xib in Resources */,
+				53A73C771B37C46D00424266 /* Accessory.json in Resources */,
 				53412D521ACC9737009CB1AB /* Images.xcassets in Resources */,
+				53A73C781B37C46D00424266 /* AccessoryFunction.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,12 +345,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53177D971AE744AF00056724 /* CreateSwitchVC.m in Sources */,
+				534B4D771BC9C24800AF67E7 /* EngageFunction.m in Sources */,
+				5362594A1BC9AD4C00038B13 /* EngageUnit.m in Sources */,
 				53412D4A1ACC9737009CB1AB /* AppDelegate.m in Sources */,
 				53177D911AE71B8A00056724 /* HomeVC.m in Sources */,
+				534B4D7D1BC9CB1F00AF67E7 /* EngageAccessory.m in Sources */,
 				53412D471ACC9737009CB1AB /* main.m in Sources */,
-				53FD5BFA1AEB311C004B0A6F /* SwitchVC.m in Sources */,
+				534B4D7A1BC9C2E500AF67E7 /* EngageSerialCommand.m in Sources */,
 				53177D9A1AE8A75700056724 /* DataManager.m in Sources */,
+				534B4D741BC9C11900AF67E7 /* EngageConnector.m in Sources */,
 				537DF3B11AF04AC6005BB1EB /* SwitchEditVC.m in Sources */,
 				5300FD631AF1AD5F004F0889 /* NewSwitchVC.m in Sources */,
 				53E825A71ACE073400ADD347 /* BluetoothComm.m in Sources */,
@@ -445,7 +479,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Calder (FEH22VGT6C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -461,7 +496,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Calder (FEH22VGT6C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

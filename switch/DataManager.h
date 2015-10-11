@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
 #import "BluetoothComm.h"
+#import "EngageUnit.h"
 
 @interface DataManager : NSObject
 
@@ -22,9 +23,12 @@
                                       *serialCommands,
                                       *accessories,
                                       *connectors,
-                                      *savedSwitchData;
+                                      *savedSwitchData,
+                                      *savedAccessories;
 
 @property (nonatomic, strong) BluetoothComm *btComm;
+
+@property (nonatomic, strong) EngageUnit *primaryUnit;
 
 + (id)sharedDataManager;
 

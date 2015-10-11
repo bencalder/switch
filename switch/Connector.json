@@ -1,0 +1,23 @@
+[
+	{
+        "brand": "Weatherpack",
+        "createdAt": "2015-04-23T22:50:18.408Z",
+        "objectId": "S8e5Di6Y2E",
+        "pinCount": 3,
+        "updatedAt": "2015-04-23T22:50:26.809Z"
+    },
+	{
+        "brand": "Weatherpack",
+        "createdAt": "2015-04-23T22:50:33.132Z",
+        "objectId": "1pvObn3kxX",
+        "pinCount": 2,
+        "updatedAt": "2015-04-23T22:50:42.960Z"
+    },
+	{
+        "brand": "Deutsch",
+        "createdAt": "2015-04-23T22:50:48.446Z",
+        "objectId": "ZzQ5PxB5pn",
+        "pinCount": 2,
+        "updatedAt": "2015-04-23T22:50:49.918Z"
+    }
+]

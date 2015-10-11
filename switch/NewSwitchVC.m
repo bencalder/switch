@@ -9,11 +9,15 @@
 #import "NewSwitchVC.h"
 #import "DataManager.h"
 #import "BluetoothComm.h"
+#import "EngageUnit.h"
+#import "EngageAccessory.h"
+#import "EngageFunction.h"
+#import "EngageConnector.h"
 
-@interface NewSwitchVC () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, BTDelegate>
+@interface NewSwitchVC () <UITableViewDataSource, UITableViewDelegate, BTDelegate>
 
-@property (weak, nonatomic) IBOutlet UIButton *backB;
-@property (weak, nonatomic) IBOutlet UIButton *doneB;
+@property (weak, nonatomic) IBOutlet UIButton *backB,
+                                              *doneB;
 
 @property (weak, nonatomic) IBOutlet UITableView *switchTV;
 
@@ -29,20 +33,17 @@
 @property (nonatomic) BOOL choosingAccessory,
                            scanCompleted,
                            productIdAccepted,
-                           nameAccepted;
+                           nameAccepted,
+                           connectorCountSelected;
 
-@property (strong, nonatomic) UITextField *productIdTF,
-                                          *nameTF;
-
-@property (nonatomic) NSInteger choosingAccessoryI;
+@property (nonatomic) NSInteger choosingAccessoryI,
+                                connectorCount;
 
 @property (strong, nonatomic) BluetoothComm *btComm;
 
 @property (strong, nonatomic) NSString *scanMessageS;
 
 @property (strong, nonatomic) UIActivityIndicatorView *processingAI;
-
-@property (strong, nonatomic) UIAlertView *invalidProductIdAV;
 
 @end
 
@@ -51,7 +52,13 @@
 
 - (IBAction)buttonPress:(id)sender
 {
- if (sender == self.doneB) [self saveSwitchDataToParse];
+ if (sender == self.backB)
+    {
+    [self.btComm stopScan];
+    [self performSegueWithIdentifier:@"unwindtohomefromnewswitch" sender:self];
+    }
+ else
+ if (sender == self.doneB) [self saveSwitch];
 }
 
 
@@ -69,10 +76,16 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
- if (section == 3)   // Accessories
+ if (section == 1)
     {
-    if (self.choosingAccessory) return self.displayAccessoriesMA.count;
-    else                        return self.selectedAccessoriesMA.count;
+    if (self.connectorCountSelected) return 1;
+    else                             return 4;
+    }
+ else
+ if (section == 2)   // Accessories
+    {
+    if (self.choosingAccessory) return self.sharedData.accessories.count;
+    else                        return self.connectorCount;
     }
  else return 1;
 }
@@ -81,13 +94,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 UITableViewCell *cell;
-PFObject *switchPFO;
 NSDictionary *d;
-NSString *str;
  
  cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"subtitle"];
- 
- switchPFO = self.sharedData.selectedSwitchPFO;
  
  if (indexPath.section == 0)    // Scan
     {
@@ -101,76 +110,18 @@ NSString *str;
        }
     }
  else
- if (indexPath.section == 1)    // Product ID
+ if (indexPath.section == 1)    //  Number of connectors
     {
-//    for (UIView *vw in cell.contentView.subviews) [vw removeFromSuperview];
-    
-    if (self.productIdAccepted)
-       {
-       [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-       
-       cell.textLabel.text = self.sharedData.freshSwitchPFO.objectId;
-       }
-    else
-       {
-       self.productIdTF                        = UITextField.new;
-       self.productIdTF.frame                  = CGRectMake(15, 0, self.switchTV.frame.size.width - 40, cell.frame.size.height);
-       self.productIdTF.delegate               = self;
-       self.productIdTF.autocorrectionType     = UITextAutocorrectionTypeNo;
-       self.productIdTF.autocapitalizationType = UITextAutocapitalizationTypeNone;
-       self.productIdTF.borderStyle            = UITextBorderStyleNone;
-       self.productIdTF.placeholder            = @"Enter the code printed on your switch.";
-       [self.productIdTF setReturnKeyType:UIReturnKeyDone];
-       
-       [cell.contentView addSubview:self.productIdTF];
-    
-       [cell setAccessoryType:UITableViewCellAccessoryNone];
-       
-       [cell addSubview:[self buildActivityIndicatorForCell:cell]];
-       }
+    if (self.connectorCountSelected) cell.textLabel.text = [NSString stringWithFormat:@"%li", self.connectorCount];
+    else                             cell.textLabel.text = [NSString stringWithFormat:@"%li", indexPath.row + 1];
     }
  else
- if (indexPath.section == 2)    // Name
+ if (indexPath.section == 2)   //  Accessories
     {
-//    for (UIView *vw in cell.contentView.subviews) [vw removeFromSuperview];
-    
-    if (self.nameAccepted)
-       {
-       [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-       
-       cell.textLabel.text = self.sharedData.freshSwitchPFO[@"name"];
-       }
+    if (self.choosingAccessory) cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", self.displayAccessoriesMA[indexPath.row][@"brand"], self.displayAccessoriesMA[indexPath.row][@"model"]];
     else
        {
-       self.nameTF                        = UITextField.new;
-       self.nameTF.frame                  = CGRectMake(15, 0, self.switchTV.frame.size.width - 40, cell.frame.size.height);
-       self.nameTF.delegate               = self;
-       self.nameTF.autocapitalizationType = UITextAutocapitalizationTypeWords;
-       self.nameTF.borderStyle            = UITextBorderStyleNone;
-       self.nameTF.placeholder            = @"Enter a name for your switch.";
-       [self.nameTF setReturnKeyType:UIReturnKeyDone];
-       
-       [cell.contentView addSubview:self.nameTF];
-    
-       [cell setAccessoryType:UITableViewCellAccessoryNone];
-       }
-    }
- else
- if (indexPath.section == 3)   //  Accessories
-    {
-    if (self.choosingAccessory)
-       {
-       cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", self.displayAccessoriesMA[indexPath.row][@"brand"], self.displayAccessoriesMA[indexPath.row][@"model"]];
-       
-       if ([((PFObject *)self.displayAccessoriesMA[indexPath.row]).objectId isEqualToString:self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryId"]])
-          {
-          cell.accessoryType = UITableViewCellAccessoryCheckmark;
-          }
-       else cell.accessoryType = UITableViewCellAccessoryNone;
-       }
-    else
-       {
-       if ((str = self.selectedAccessoriesMA[indexPath.row][@"accessoryBrand"]) == nil)  //  user has not chosen an accessory for this connector
+       if (self.selectedAccessoriesMA.count < self.connectorCount)  //  user has not chosen an accessory for this connector
           {
           cell.textLabel.text = @"Choose an accessory";
           }
@@ -179,7 +130,7 @@ NSString *str;
           d = self.selectedAccessoriesMA[indexPath.row];
        
           cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0];
-          cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", d[@"accessoryBrand"], d[@"accessoryModel"]];
+          cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", d[@"brand"], d[@"model"]];
           }
         
        cell.detailTextLabel.text = [NSString stringWithFormat:@"Connector %ld", indexPath.row + 1];
@@ -201,28 +152,32 @@ NSString *str;
        }
     }
  else
- if (indexPath.section == 3) // accessory
+ if (indexPath.section == 1)
+    {
+    self.connectorCount = indexPath.row + 1;
+    
+    self.connectorCountSelected = YES;
+    
+    [self.sectionTitlesMA addObject:@"Select accessories"];
+       
+    [self.switchTV beginUpdates];
+    [self.switchTV reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.switchTV insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.switchTV endUpdates];
+    }
+ else
+ if (indexPath.section == 2) // accessory
     {
     if (self.choosingAccessory)
        {
-       NSDictionary *d;
-       
-       d = @{@"accessoryBrand"     : self.displayAccessoriesMA[indexPath.row][@"brand"],
-             @"accessoryModel"     : self.displayAccessoriesMA[indexPath.row][@"model"],
-             @"accessoryFunctions" : self.displayAccessoriesMA[indexPath.row][@"functions"],
-             @"accessoryId"        : ((PFObject *)self.displayAccessoriesMA[indexPath.row]).objectId,
-             @"objectId"           : self.selectedAccessoriesMA[self.choosingAccessoryI][@"objectId"],
-             @"relays"             : self.selectedAccessoriesMA[self.choosingAccessoryI][@"relays"]
-            };
-       
-       [self.selectedAccessoriesMA replaceObjectAtIndex:self.choosingAccessoryI withObject:d];
+       [self.selectedAccessoriesMA addObject:self.displayAccessoriesMA[indexPath.row]];
        
        self.choosingAccessory = NO;
        }
     else
        {
        self.choosingAccessory = YES;
-       [self buildAccessoryArrayForConnector:indexPath.row];
+       self.displayAccessoriesMA = [NSMutableArray arrayWithArray:self.sharedData.accessories];
        }
      
     [self.switchTV reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -249,47 +204,6 @@ NSString *str;
  self.choosingAccessoryI = connectorInt;
 
  self.displayAccessoriesMA = NSMutableArray.new;
- 
- for (PFObject *accessory in self.sharedData.accessories)  // loop through all of the possible accessories
-    {
-    for (int i = 0; i < ((NSArray *)accessory[@"connectors"]).count; i++)   //  loop through each connector of each accessory
-       {
-       if ([accessory[@"connectors"][i][@"objectId"] isEqualToString:self.selectedAccessoriesMA[connectorInt][@"objectId"]])
-          {
-          [self.displayAccessoriesMA addObject:accessory];
-          break;
-          }
-       }
-    }
-}
-
-
-- (void)doneWithKeyboard:(UIButton *)sender
-{
- [self.productIdTF resignFirstResponder];
- [self.nameTF      resignFirstResponder];
-}
-
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
- if (textField == self.productIdTF)
-    {
-    [self.productIdTF resignFirstResponder];
-    
-    [self.processingAI startAnimating];
-    
-    [self checkProductId];
-    }
- else
- if (textField == self.nameTF)
-    {
-    [self.nameTF resignFirstResponder];
-    
-    [self validateName];
-    }
- 
- return YES;
 }
 
 
@@ -314,7 +228,7 @@ NSString *str;
 
  [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(scanComplete:) userInfo:nil repeats:NO];
  
- self.peripheralMA = NSMutableArray.new;  // make new array to add UUID's to
+ self.peripheralMA = NSMutableArray.new;     // make new array to add UUID's to
  
  [self.btComm findPeripheralsWithTimeout:2];
 }
@@ -332,126 +246,35 @@ NSString *str;
 {
  [self.processingAI stopAnimating];
 
- if (self.peripheralMA.count > 0)   // found bluetooth devices with desired service
+ if (self.peripheralMA.count > 0)                                          // found bluetooth devices with desired service
     {
-    if (self.sharedData.savedSwitchData != nil)   // at least one switch already exists on this device
-       {
-       for (CBPeripheral *per in self.peripheralMA)   // iterate through each matching Bluetooth device that was found
-          {
-          for (NSDictionary *d in self.sharedData.savedSwitchData)   // iterate through each existing switch
-             {
+    if (self.sharedData.savedSwitchData != nil)                            // at least one switch already exists on this device
+       for (CBPeripheral *per in self.peripheralMA)                        // iterate through each matching Bluetooth device that was found
+          for (NSDictionary *d in self.sharedData.savedSwitchData)         // iterate through each existing switch
              if ([per.identifier.UUIDString isEqualToString:d[@"uuid"]])   // match existing switches with found devices
                 {
-                [self.peripheralMA removeObject:per];   // if it matches, then remove the existing switch from the array
+                [self.peripheralMA removeObject:per];                      // if it matches, then remove the existing switch from the array
                 break;
                 }
-             }
-          }
-       }
  
-    if (self.peripheralMA.count == 0)   //  the scan only found existing switches
-       {
-       self.scanMessageS = @"Didn't find any new switches.";
-       }
+    if (self.peripheralMA.count == 0) self.scanMessageS = @"Didn't find any new switches.";   //  the scan only found existing switches
     else
     if (self.peripheralMA.count == 1)  // found one switch
        {
        self.scanCompleted = YES;
-       self.scanMessageS  = @"Found your switch!";
-       [self.sectionTitlesMA addObject:@"Product ID"];
+       self.scanMessageS  = @"Found your Engage switch!";
+       [self.sectionTitlesMA addObject:@"Select number of connectors"];
        
        [self.switchTV beginUpdates];
        [self.switchTV reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
        [self.switchTV insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
        [self.switchTV endUpdates];
-       
-       [self.productIdTF becomeFirstResponder];
        }
     else self.scanMessageS = @"Found multiple switches. Try again.";
-     
     }
- else   // did not find a bluetooth device
-    {
-    self.scanMessageS = @"No switch found. Tap to scan again.";
-    }
+ else self.scanMessageS = @"No switch found. Tap to scan again.";   // did not find a bluetooth device
  
  [self.switchTV reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
-
-- (void)checkProductId
-{
- PFQuery *query = [PFQuery queryWithClassName:@"WirelessSwitch"];
- 
- [query whereKey:@"objectId" equalTo:self.productIdTF.text];
- 
- [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error)
-    {
-    if (!error)
-       {
-       self.sharedData.freshSwitchPFO = object;
-       self.sharedData.freshSwitchPFO[@"uuid"] = ((CBPeripheral *)self.peripheralMA[0]).identifier.UUIDString;
-       
-       self.selectedAccessoriesMA = self.sharedData.freshSwitchPFO[@"connectors"];
-       
-       self.productIdAccepted = YES;
-       
-       [self.sectionTitlesMA addObject:@"Name"];
-       
-       [self.switchTV beginUpdates];
-       [self.switchTV reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-       [self.switchTV insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationAutomatic];
-       [self.switchTV endUpdates];
-       
-       [self.nameTF becomeFirstResponder];
-       }
-    else
-       {
-       NSLog(@"Error: %@ %@", error, [error userInfo]);
-       
-       self.productIdTF.text = @"";
-       
-       [self showInvalidAV];
-       }
-     
-    [self.processingAI stopAnimating];
-    }
- ];
-}
-
-
-- (void)showInvalidAV
-{
- self.invalidProductIdAV = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The product ID that you entered is invalid. Please try again." delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
- [self.invalidProductIdAV show];
-       
- [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlertView:) userInfo:nil repeats:NO];
-}
-
-
-- (void)dismissAlertView:(NSTimer *)timer
-{
- [self.invalidProductIdAV dismissWithClickedButtonIndex:0 animated:YES];
- 
- [self.productIdTF becomeFirstResponder];
-}
-
-
-- (void)validateName
-{
- if (self.nameTF.text.length < 26)   // only accept names with 25 characters or less
-    {
-    self.sharedData.freshSwitchPFO[@"name"] = self.nameTF.text;
-    
-    self.nameAccepted = YES;
-    
-    [self.sectionTitlesMA addObject:@"Accessories"];
-    
-    [self.switchTV beginUpdates];
-    [self.switchTV reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.switchTV insertSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.switchTV endUpdates];
-    }
 }
 
 
@@ -460,58 +283,114 @@ NSString *str;
  BOOL show = YES;
  
  for (NSDictionary *d in self.selectedAccessoriesMA)
-    {
     if (d[@"accessoryBrand"] == nil) show = NO;
-    }
  
  if (show) self.doneB.hidden = NO;
 }
 
 
-- (void)saveSwitchDataToParse
+- (void)saveSwitch
 {
- self.sharedData.freshSwitchPFO[@"isSetup"] = [NSNumber numberWithBool:YES];
+NSMutableArray *accessoryMA;
+NSInteger relayIdx;
 
- [self.sharedData.freshSwitchPFO saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+ self.sharedData.primaryUnit = [[EngageUnit alloc] init];
+ 
+ accessoryMA = NSMutableArray.new;
+ 
+ relayIdx = 1;
+ 
+ for (NSDictionary *accessoryData in self.selectedAccessoriesMA)    //    loop through each of the connected accessories
     {
-    if (succeeded)
-       {
-       NSLog(@"Saved new switch.");
-       
-       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-       
-       NSDictionary *d = @{@"uuid" : self.sharedData.freshSwitchPFO[@"uuid"], @"objectId" : self.sharedData.freshSwitchPFO.objectId};
-       
-       if ([defaults objectForKey:@"switchArray"] == nil)
-          {
-          NSMutableArray *switchMA;
+    EngageAccessory *accessory;
+    NSMutableArray *connectorsMA, *functionsMA;
     
-           switchMA = NSMutableArray.new;
-    
-           [switchMA addObject:d];
-    
-           [defaults setObject:switchMA forKey:@"switchArray"];
-          }
-       else
-          {
-          NSMutableArray *mA;
-          
-          mA = NSMutableArray.new;
-          
-          for (NSDictionary *switchD in [defaults objectForKey:@"switchArray"]) [mA addObject:switchD];
+     accessory             = [[EngageAccessory alloc] init];
+     accessory.objectId    = accessoryData[@"objectId"];
+     accessory.brand       = accessoryData[@"brand"];
+     accessory.model       = accessoryData[@"model"];
+     accessory.currentDraw = ((NSNumber *)accessoryData[@"currentDraw"]).floatValue;
+     
+     connectorsMA = NSMutableArray.new;
+     
+     for (NSDictionary *connectorIDD in accessoryData[@"connectors"])
+        for (NSDictionary *availableConnectorD in self.sharedData.connectors)
+           if ([connectorIDD[@"objectId"] isEqualToString:availableConnectorD[@"objectId"]])
+              {
+              EngageConnector *connector;
+              
+               connector = [[EngageConnector alloc] init];
+               
+               if ([(connector.objectId = availableConnectorD[@"objectId"]) isEqualToString:@"S8e5Di6Y2E"])
+                  {
+                  connector.relays = @[[NSNumber numberWithInteger:relayIdx], [NSNumber numberWithInteger:relayIdx + 1]];
+                  relayIdx         = relayIdx + 2;
+                  }
+               else
+                  {
+                  connector.relays = @[[NSNumber numberWithInteger:relayIdx]];
+                  relayIdx++;
+                  }
+               
+               connector.brand    = availableConnectorD[@"brand"];
+               connector.pinCount = ((NSNumber *)availableConnectorD[@"brand"]).integerValue;
+
+               
+               [connectorsMA addObject:connector];
+              }
+     
+     accessory.connectors = connectorsMA;
+     
+     for (NSDictionary *availableFunctionD in self.sharedData.functions)
+        if ([accessoryData[@"primaryFunction"][@"objectId"] isEqualToString:availableFunctionD[@"objectId"]])
+           {
+           EngageFunction *primaryFunction;
            
-          [mA addObject:d];
-          
-          [defaults setObject:mA forKey:@"switchArray"];
-          }
-       
-       [defaults synchronize];
-       
-       [self performSegueWithIdentifier:@"unwindtohomefromnewswitch" sender:self];
-       }
-    else NSLog(@"Error: %@ %@", error, [error userInfo]);
+            primaryFunction                = [[EngageFunction alloc] init];
+            primaryFunction.objectId       = availableFunctionD[@"objectId"];
+            primaryFunction.onName         = availableFunctionD[@"onName"];
+            primaryFunction.signalDuration = ((NSNumber *)availableFunctionD[@"signalDuration"]).floatValue;
+            primaryFunction.momentary      = ((NSNumber *)availableFunctionD[@"momentary"]).boolValue;
+            
+            accessory.primaryFunction = primaryFunction;
+           }
+     
+     functionsMA = NSMutableArray.new;
+     
+     for (NSString *functionID in accessoryData[@"functions"])
+        for (NSDictionary *availableFunctionD in self.sharedData.functions)
+           if ([functionID isEqualToString:availableFunctionD[@"objectId"]])
+              {
+              EngageFunction *function;
+           
+               function                = [[EngageFunction alloc] init];
+               function.objectId       = availableFunctionD[@"objectId"];
+               function.onName         = availableFunctionD[@"onName"];
+               function.signalDuration = ((NSNumber *)availableFunctionD[@"signalDuration"]).floatValue;
+               function.momentary      = ((NSNumber *)availableFunctionD[@"momentary"]).boolValue;
+               
+               [functionsMA addObject:function];
+              }
+     
+     accessory.functions = functionsMA;
+     
+     [accessoryMA addObject:accessory];
     }
- ];
+ 
+ self.sharedData.primaryUnit.accessories = accessoryMA;
+ 
+ NSUserDefaults *userDefaults;
+ userDefaults = [NSUserDefaults standardUserDefaults];
+ 
+ NSMutableArray *archiveArray;
+ archiveArray = NSMutableArray.new;
+ 
+ [archiveArray addObject:[NSKeyedArchiver archivedDataWithRootObject:self.sharedData.primaryUnit]];
+ [userDefaults setObject:archiveArray forKey:@"primaryUnit"];
+ 
+ [userDefaults synchronize];
+ 
+ [self performSegueWithIdentifier:@"unwindtohomefromnewswitch" sender:self];
 }
 
 
@@ -534,6 +413,11 @@ NSString *str;
  self.scanCompleted = NO;
  
  self.choosingAccessory = NO;
+ 
+ self.connectorCountSelected = NO;
+ 
+ self.displayAccessoriesMA = NSMutableArray.new;
+ self.selectedAccessoriesMA = NSMutableArray.new;
 }
 
 
@@ -561,7 +445,6 @@ NSString *str;
 - (void)didDisconnect:(CBPeripheral *)peripheral
 {
  NSLog(@"Disconnected from peripheral: %@", peripheral);
- 
 }
 
 
@@ -577,14 +460,5 @@ NSString *str;
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
