@@ -11,11 +11,11 @@
 #import <Parse/Parse.h>
 #import "HomeVC.h"
 #import "EngageAccessory.h"
+#import "Utilities.h"
 
 @interface SwitchEditVC () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, BTDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *backB;
-@property (weak, nonatomic) IBOutlet UIButton *saveB;
 
 @property (strong, nonatomic) UIButton *keyboardDoneB,
                                        *keyboardCancelB;
@@ -48,46 +48,8 @@
 
 - (IBAction)buttonPress:(id)sender
 {
- if (sender == self.backB)
-    {
-    [self performSegueWithIdentifier:@"unwindfromswitchedittohome" sender:self];
-    }
- else
- if (sender == self.saveB)
-    {
-//    [self.nameTF resignFirstResponder];
-//    [self saveSwitchEditsToParse];
-    }
+ if (sender == self.backB) [self performSegueWithIdentifier:@"unwindfromswitchedittohome" sender:self];
 }
-
-
-//- (void)saveSwitchEditsToParse
-//{
-// self.sharedData.selectedSwitchPFO[@"name"]       = self.nameTF.text;
-// self.sharedData.selectedSwitchPFO[@"connectors"] = self.selectedAccessoriesMA;
-// 
-// [self.sharedData.selectedSwitchPFO saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-//    {
-//    if (!error)
-//       {
-//       self.saveB.hidden = YES;
-//       
-//       self.savedAV = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"The switch information was saved successfully." delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
-//       [self.savedAV show];
-//       
-//       [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlertView:) userInfo:nil repeats:NO];
-//       }
-//    else NSLog(@"Error: %@ %@", error, [error userInfo]);
-//    }
-// ];
-//}
-
-
-//- (void)dismissAlertView:(NSTimer *)timer
-//{
-// [self.savedAV dismissWithClickedButtonIndex:0 animated:YES];
-//}
-
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -116,59 +78,34 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 UITableViewCell *cell;
-//PFObject *switchPFO;
-NSDictionary *d;
-EngageAccessory *accessory;
+EngageAccessory *accessory, *displayAccessory;
  
  cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"subtitle"];
  
-// switchPFO = self.sharedData.selectedSwitchPFO;
- 
- accessory = self.selectedAccessoriesMA[indexPath.section];
- 
-// if (indexPath.section == 0)    // Name
-//    {
-//    for (UIView *vw in cell.contentView.subviews) [vw removeFromSuperview];
-//    
-//    self.nameTF                    = UITextField.new;
-//    self.nameTF.frame              = CGRectMake(20, 0, self.editTV.frame.size.width - 40, cell.frame.size.height);
-//    self.nameTF.delegate           = self;
-//    self.nameTF.autocorrectionType = UITextAutocorrectionTypeNo;
-//    self.nameTF.borderStyle        = UITextBorderStyleNone;
-////    self.nameTF.text               = switchPFO[@"name"];
-//    [self.nameTF setInputAccessoryView:[self accessoryViewForTextField]];
-//    [self.nameTF setReturnKeyType:UIReturnKeyDone];
-//    
-//    [cell.contentView addSubview:self.nameTF];
-//    }
-// else
  if (indexPath.section == 0)   //  Accessories
     {
     if (self.choosingAccessory)
        {
-       cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", self.displayAccessoriesMA[indexPath.row][@"brand"], self.displayAccessoriesMA[indexPath.row][@"model"]];
+       displayAccessory = self.displayAccessoriesMA[indexPath.row];
+        
+       cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", displayAccessory.brand, displayAccessory.model];
        
-       if ([((PFObject *)self.displayAccessoriesMA[indexPath.row]).objectId isEqualToString:self.selectedAccessoriesMA[self.choosingAccessoryI][@"accessoryId"]])
-          {
-          cell.accessoryType = UITableViewCellAccessoryCheckmark;
-          }
-       else cell.accessoryType = UITableViewCellAccessoryNone;
+       for (EngageAccessory *selectedAccessory in self.selectedAccessoriesMA)
+          if ([selectedAccessory.objectId isEqualToString:((EngageAccessory *)self.displayAccessoriesMA[indexPath.row]).objectId])
+             {
+             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+             }
+          else cell.accessoryType = UITableViewCellAccessoryNone;
        }
     else
        {
-       d = self.selectedAccessoriesMA[indexPath.row];
+       accessory = self.selectedAccessoriesMA[indexPath.row];
        
        cell.textLabel.font       = [UIFont fontWithName:@"Helvetica" size:13.0];
-       cell.textLabel.text       = [NSString stringWithFormat:@"%@ %@", d[@"accessoryBrand"], d[@"accessoryModel"]];
+       cell.textLabel.text       = [NSString stringWithFormat:@"%@ %@", accessory.brand, accessory.model];
        cell.detailTextLabel.text = [NSString stringWithFormat:@"Connector %ld", indexPath.row + 1];
        }
     }
-// else
-// if (indexPath.section == 1)    // Delete switch
-//    {
-//    cell.textLabel.text       = @"Delete switch";
-//    cell.detailTextLabel.text = @"This will permanently delete this switch from your account.";
-//    }
 
  return cell;
 }
@@ -180,21 +117,13 @@ EngageAccessory *accessory;
     {
     if (self.choosingAccessory)
        {
-       NSDictionary *d;
+       [self.selectedAccessoriesMA replaceObjectAtIndex:self.choosingAccessoryI withObject:self.displayAccessoriesMA[indexPath.row]];
        
-        d = @{@"accessoryBrand"     : self.displayAccessoriesMA[indexPath.row][@"brand"],
-              @"accessoryModel"     : self.displayAccessoriesMA[indexPath.row][@"model"],
-              @"accessoryFunctions" : self.displayAccessoriesMA[indexPath.row][@"functions"],
-              @"accessoryId"        : ((PFObject *)self.displayAccessoriesMA[indexPath.row]).objectId,
-              @"objectId"           : self.selectedAccessoriesMA[self.choosingAccessoryI][@"objectId"],
-              @"relays"             : self.selectedAccessoriesMA[self.choosingAccessoryI][@"relays"]
-             };
+       [Utilities determineRelaysForAccessory:self.selectedAccessoriesMA[self.choosingAccessoryI] atConnector:self.choosingAccessoryI + 1];
        
-        [self.selectedAccessoriesMA replaceObjectAtIndex:self.choosingAccessoryI withObject:d];
+       self.sharedData.primaryUnit.accessories = self.selectedAccessoriesMA;
        
-        self.choosingAccessory = NO;
-       
-        self.saveB.hidden = NO;
+       self.choosingAccessory = NO;
        }
     else
        {
@@ -211,91 +140,6 @@ EngageAccessory *accessory;
 //    [self.deleteAS showInView:self.view];
 //    }
 }
-
-
-//- (void)buildAccessoryArrayForConnector:(NSInteger)connectorInt
-//{
-// self.choosingAccessoryI = connectorInt;
-//
-// self.displayAccessoriesMA = NSMutableArray.new;
-// 
-// for (PFObject *accessory in self.sharedData.accessories)  // loop through all of the possible accessories
-//    for (int i = 0; i < ((NSArray *)accessory[@"connectors"]).count; i++)   //  loop through each connector of each accessory
-//       if ([accessory[@"connectors"][i][@"objectId"] isEqualToString:self.selectedAccessoriesMA[connectorInt][@"objectId"]])
-//          {
-//          [self.displayAccessoriesMA addObject:accessory];
-//          break;
-//          }
-//}
-
-
-//- (UIView *)accessoryViewForTextField
-//{
-//UIView *vw;
-//
-// vw                 = UIView.new;
-// vw.frame           = CGRectMake(0, 0, self.view.frame.size.width, 50);
-// vw.backgroundColor = [UIColor whiteColor];
-// 
-// self.keyboardDoneB       = [UIButton buttonWithType:UIButtonTypeSystem];
-// self.keyboardDoneB.frame = CGRectMake(vw.frame.size.width - 60, 0, 50, 50);
-// [self.keyboardDoneB setTitle:@"Done" forState:UIControlStateNormal];
-// [self.keyboardDoneB addTarget:self action:@selector(doneWithKeyboard:) forControlEvents:UIControlEventTouchUpInside];
-// 
-// self.keyboardCancelB       = [UIButton buttonWithType:UIButtonTypeSystem];
-// self.keyboardCancelB.frame = CGRectMake(10, 0, 50, 50);
-// [self.keyboardCancelB setTitle:@"Cancel" forState:UIControlStateNormal];
-// [self.keyboardCancelB addTarget:self action:@selector(cancelKeyboard:) forControlEvents:UIControlEventTouchUpInside];
-//
-// self.cancelNameS = self.nameTF.text;
-// 
-// [vw addSubview:self.keyboardDoneB];
-// [vw addSubview:self.keyboardCancelB];
-//
-//return vw;
-//}
-
-
-//- (void)doneWithKeyboard:(UIButton *)sender
-//{
-// [self.nameTF resignFirstResponder];
-//}
-
-
-//- (void)cancelKeyboard:(UIButton *)sender
-//{
-// [self.nameTF resignFirstResponder];
-// self.nameTF.text = self.cancelNameS;
-// 
-// self.saveB.hidden = YES;
-//}
-
-
-//- (BOOL)textFieldShouldReturn:(UITextField *)textField
-//{
-// if (textField == self.nameTF) [self.nameTF resignFirstResponder];
-// 
-// return YES;
-//}
-//
-//
-//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-//{
-// self.saveB.hidden = NO;
-//
-// return YES;
-//}
-
-
-//- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-// if (buttonIndex == 0)   // remove the dict of the current switch from user defaults and send user back to HomeVC
-//    {
-//    if (self.btComm.activePeripheral) [self.btComm disconnect:self.btComm.activePeripheral];
-//    
-//    [self deleteSwitch];
-//    }
-//}
 
 
 - (void)deleteSwitch
@@ -341,6 +185,7 @@ NSMutableArray *switchA;
 // self.selectedAccessoriesMA = [[NSMutableArray alloc] initWithArray:self.sharedData.selectedSwitchPFO[@"connectors"] copyItems:YES];
 
  self.selectedAccessoriesMA = [NSMutableArray arrayWithArray:self.sharedData.primaryUnit.accessories];
+ self.displayAccessoriesMA  = [NSMutableArray arrayWithArray:self.sharedData.accessories];
  
  self.sectionTitleA = @[@"Accessories"];
  
@@ -352,12 +197,6 @@ NSMutableArray *switchA;
 {
  [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
- if ([segue.identifier isEqualToString:@"unwindfromswitchedittohome"]) ((HomeVC *)[segue destinationViewController]).btComm = self.btComm;
 }
 
 

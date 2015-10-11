@@ -13,6 +13,7 @@
 #import "EngageAccessory.h"
 #import "EngageFunction.h"
 #import "EngageConnector.h"
+#import "Utilities.h"
 
 @interface NewSwitchVC () <UITableViewDataSource, UITableViewDelegate, BTDelegate>
 
@@ -94,7 +95,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 UITableViewCell *cell;
-NSDictionary *d;
  
  cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"subtitle"];
  
@@ -118,7 +118,7 @@ NSDictionary *d;
  else
  if (indexPath.section == 2)   //  Accessories
     {
-    if (self.choosingAccessory) cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", self.displayAccessoriesMA[indexPath.row][@"brand"], self.displayAccessoriesMA[indexPath.row][@"model"]];
+    if (self.choosingAccessory) cell.textLabel.text = [Utilities stringFromAccessory:self.displayAccessoriesMA[indexPath.row]];
     else
        {
        if (self.selectedAccessoriesMA.count < self.connectorCount)  //  user has not chosen an accessory for this connector
@@ -127,10 +127,8 @@ NSDictionary *d;
           }
        else
           {
-          d = self.selectedAccessoriesMA[indexPath.row];
-       
           cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0];
-          cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", d[@"brand"], d[@"model"]];
+          cell.textLabel.text = [Utilities stringFromAccessory:self.selectedAccessoriesMA[indexPath.row]];
           }
         
        cell.detailTextLabel.text = [NSString stringWithFormat:@"Connector %ld", indexPath.row + 1];
@@ -170,7 +168,13 @@ NSDictionary *d;
     {
     if (self.choosingAccessory)
        {
-       [self.selectedAccessoriesMA addObject:self.displayAccessoriesMA[indexPath.row]];
+       EngageAccessory *accessory;
+       
+        accessory = self.displayAccessoriesMA[indexPath.row];
+        
+        [Utilities determineRelaysForAccessory:accessory atConnector:self.choosingAccessoryI + 1];
+        
+       [self.selectedAccessoriesMA addObject:accessory];
        
        self.choosingAccessory = NO;
        }
@@ -282,8 +286,7 @@ NSDictionary *d;
 {
  BOOL show = YES;
  
- for (NSDictionary *d in self.selectedAccessoriesMA)
-    if (d[@"accessoryBrand"] == nil) show = NO;
+ if (self.selectedAccessoriesMA.count < self.connectorCount) show = NO;
  
  if (show) self.doneB.hidden = NO;
 }
@@ -291,93 +294,9 @@ NSDictionary *d;
 
 - (void)saveSwitch
 {
-NSMutableArray *accessoryMA;
-NSInteger relayIdx;
-
  self.sharedData.primaryUnit = [[EngageUnit alloc] init];
  
- accessoryMA = NSMutableArray.new;
- 
- relayIdx = 1;
- 
- for (NSDictionary *accessoryData in self.selectedAccessoriesMA)    //    loop through each of the connected accessories
-    {
-    EngageAccessory *accessory;
-    NSMutableArray *connectorsMA, *functionsMA;
-    
-     accessory             = [[EngageAccessory alloc] init];
-     accessory.objectId    = accessoryData[@"objectId"];
-     accessory.brand       = accessoryData[@"brand"];
-     accessory.model       = accessoryData[@"model"];
-     accessory.currentDraw = ((NSNumber *)accessoryData[@"currentDraw"]).floatValue;
-     
-     connectorsMA = NSMutableArray.new;
-     
-     for (NSDictionary *connectorIDD in accessoryData[@"connectors"])
-        for (NSDictionary *availableConnectorD in self.sharedData.connectors)
-           if ([connectorIDD[@"objectId"] isEqualToString:availableConnectorD[@"objectId"]])
-              {
-              EngageConnector *connector;
-              
-               connector = [[EngageConnector alloc] init];
-               
-               if ([(connector.objectId = availableConnectorD[@"objectId"]) isEqualToString:@"S8e5Di6Y2E"])
-                  {
-                  connector.relays = @[[NSNumber numberWithInteger:relayIdx], [NSNumber numberWithInteger:relayIdx + 1]];
-                  relayIdx         = relayIdx + 2;
-                  }
-               else
-                  {
-                  connector.relays = @[[NSNumber numberWithInteger:relayIdx]];
-                  relayIdx++;
-                  }
-               
-               connector.brand    = availableConnectorD[@"brand"];
-               connector.pinCount = ((NSNumber *)availableConnectorD[@"brand"]).integerValue;
-
-               
-               [connectorsMA addObject:connector];
-              }
-     
-     accessory.connectors = connectorsMA;
-     
-     for (NSDictionary *availableFunctionD in self.sharedData.functions)
-        if ([accessoryData[@"primaryFunction"][@"objectId"] isEqualToString:availableFunctionD[@"objectId"]])
-           {
-           EngageFunction *primaryFunction;
-           
-            primaryFunction                = [[EngageFunction alloc] init];
-            primaryFunction.objectId       = availableFunctionD[@"objectId"];
-            primaryFunction.onName         = availableFunctionD[@"onName"];
-            primaryFunction.signalDuration = ((NSNumber *)availableFunctionD[@"signalDuration"]).floatValue;
-            primaryFunction.momentary      = ((NSNumber *)availableFunctionD[@"momentary"]).boolValue;
-            
-            accessory.primaryFunction = primaryFunction;
-           }
-     
-     functionsMA = NSMutableArray.new;
-     
-     for (NSString *functionID in accessoryData[@"functions"])
-        for (NSDictionary *availableFunctionD in self.sharedData.functions)
-           if ([functionID isEqualToString:availableFunctionD[@"objectId"]])
-              {
-              EngageFunction *function;
-           
-               function                = [[EngageFunction alloc] init];
-               function.objectId       = availableFunctionD[@"objectId"];
-               function.onName         = availableFunctionD[@"onName"];
-               function.signalDuration = ((NSNumber *)availableFunctionD[@"signalDuration"]).floatValue;
-               function.momentary      = ((NSNumber *)availableFunctionD[@"momentary"]).boolValue;
-               
-               [functionsMA addObject:function];
-              }
-     
-     accessory.functions = functionsMA;
-     
-     [accessoryMA addObject:accessory];
-    }
- 
- self.sharedData.primaryUnit.accessories = accessoryMA;
+ self.sharedData.primaryUnit.accessories = self.selectedAccessoriesMA;
  
  NSUserDefaults *userDefaults;
  userDefaults = [NSUserDefaults standardUserDefaults];

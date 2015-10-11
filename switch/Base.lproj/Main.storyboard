@@ -35,9 +35,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uMV-fg-IVo">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uMV-fg-IVo">
                                 <rect key="frame" x="562" y="39" width="22" height="22"/>
                                 <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="t42-Bx-EKh"/>
+                                    <constraint firstAttribute="width" constant="22" id="wCY-F2-r5k"/>
+                                </constraints>
                                 <state key="normal">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -71,7 +75,7 @@
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ENGAGE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IS6-OB-zai">
-                                <rect key="frame" x="239" y="39" width="122" height="21"/>
+                                <rect key="frame" x="239" y="39.5" width="122" height="20.5"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="122" id="vaF-IL-SE3"/>
@@ -102,7 +106,6 @@
                                 </state>
                                 <connections>
                                     <action selector="buttonPress:" destination="ULB-fz-Ys6" eventType="touchUpInside" id="01f-nQ-BjU"/>
-                                    <segue destination="hOe-Eh-vlh" kind="show" identifier="hometoswitchedit" id="Gfb-GN-JXD"/>
                                 </connections>
                             </button>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nsm-TZ-dmH">
@@ -123,17 +126,17 @@
                             <constraint firstItem="hpw-Yn-CIg" firstAttribute="centerY" secondItem="2GM-T0-oDv" secondAttribute="centerY" id="6c3-02-IMF"/>
                             <constraint firstItem="nVV-WW-uMN" firstAttribute="top" secondItem="R8j-WU-rvB" secondAttribute="bottom" constant="353" id="E9q-Ur-tRK"/>
                             <constraint firstItem="R8j-WU-rvB" firstAttribute="centerX" secondItem="2GM-T0-oDv" secondAttribute="centerX" id="JFg-Wj-WLR"/>
+                            <constraint firstItem="uMV-fg-IVo" firstAttribute="top" secondItem="sdt-F9-pzM" secondAttribute="bottom" constant="19" id="S9O-lu-lPN"/>
                             <constraint firstItem="RIS-4k-CQX" firstAttribute="leading" secondItem="2GM-T0-oDv" secondAttribute="leading" id="UOW-UA-8GL"/>
                             <constraint firstAttribute="trailing" secondItem="Xn1-5W-LtE" secondAttribute="trailing" id="W7S-rk-zaV"/>
                             <constraint firstAttribute="trailing" secondItem="nsm-TZ-dmH" secondAttribute="trailing" constant="68" id="XNV-eJ-lEm"/>
                             <constraint firstItem="RIS-4k-CQX" firstAttribute="leading" secondItem="5fv-9l-Dyp" secondAttribute="leading" id="XSO-yy-k8z"/>
                             <constraint firstItem="5fv-9l-Dyp" firstAttribute="top" secondItem="sdt-F9-pzM" secondAttribute="bottom" id="ZZB-TV-hAf"/>
                             <constraint firstItem="IS6-OB-zai" firstAttribute="baseline" secondItem="5fv-9l-Dyp" secondAttribute="baseline" id="Zqj-lN-5zO"/>
-                            <constraint firstItem="uMV-fg-IVo" firstAttribute="trailing" secondItem="2GM-T0-oDv" secondAttribute="trailingMargin" id="f3R-m3-Pno"/>
+                            <constraint firstItem="uMV-fg-IVo" firstAttribute="trailing" secondItem="2GM-T0-oDv" secondAttribute="trailingMargin" constant="4" id="f3R-m3-Pno"/>
                             <constraint firstItem="Xn1-5W-LtE" firstAttribute="top" secondItem="2GM-T0-oDv" secondAttribute="top" constant="20" id="kIL-Rc-fhN"/>
                             <constraint firstItem="RIS-4k-CQX" firstAttribute="bottom" secondItem="nVV-WW-uMN" secondAttribute="top" id="kap-4u-VjJ"/>
                             <constraint firstItem="RIS-4k-CQX" firstAttribute="top" secondItem="5fv-9l-Dyp" secondAttribute="bottom" id="mkD-5e-YOF"/>
-                            <constraint firstItem="uMV-fg-IVo" firstAttribute="top" secondItem="IS6-OB-zai" secondAttribute="top" id="mwh-pa-gx2"/>
                             <constraint firstItem="IS6-OB-zai" firstAttribute="centerX" secondItem="R8j-WU-rvB" secondAttribute="centerX" id="oqy-6q-sQZ"/>
                             <constraint firstItem="nsm-TZ-dmH" firstAttribute="top" secondItem="2GM-T0-oDv" secondAttribute="top" constant="35" id="rwb-Uz-wkh"/>
                         </constraints>
@@ -147,6 +150,7 @@
                         <outlet property="messageL" destination="R8j-WU-rvB" id="ckE-sg-ms3"/>
                         <outlet property="signalStrengthIV" destination="nsm-TZ-dmH" id="mIN-4Y-AW9"/>
                         <outlet property="switchTV" destination="RIS-4k-CQX" id="GHe-1z-5Gb"/>
+                        <segue destination="hOe-Eh-vlh" kind="presentation" identifier="hometoswitchedit" id="KcX-pD-7WO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YlK-Io-LYB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -289,31 +293,13 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wl4-pa-LQe">
-                                <rect key="frame" x="540" y="20" width="60" height="60"/>
-                                <animations/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="KQW-VM-46q"/>
-                                    <constraint firstAttribute="height" constant="60" id="PnK-co-3Ac"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Save">
-                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="buttonPress:" destination="hOe-Eh-vlh" eventType="touchUpInside" id="2HQ-1P-ZsT"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Wl4-pa-LQe" firstAttribute="top" secondItem="H4j-jv-5Fx" secondAttribute="top" constant="20" id="0fd-sW-Z9t"/>
                             <constraint firstItem="BN4-g0-czI" firstAttribute="leading" secondItem="H4j-jv-5Fx" secondAttribute="leading" id="KYn-30-QAc"/>
                             <constraint firstItem="hGP-pQ-frV" firstAttribute="top" secondItem="H4j-jv-5Fx" secondAttribute="top" constant="39" id="RYo-dx-e90"/>
                             <constraint firstItem="Je6-Uh-0y5" firstAttribute="top" secondItem="H4j-jv-5Fx" secondAttribute="top" constant="80" id="Ra1-9I-sBU"/>
-                            <constraint firstAttribute="trailing" secondItem="Wl4-pa-LQe" secondAttribute="trailing" id="XNj-YJ-8IR"/>
                             <constraint firstAttribute="centerX" secondItem="hGP-pQ-frV" secondAttribute="centerX" id="YTs-Z7-i2j"/>
                             <constraint firstAttribute="bottom" secondItem="Je6-Uh-0y5" secondAttribute="bottom" id="cwh-hg-ld3"/>
                             <constraint firstItem="Je6-Uh-0y5" firstAttribute="leading" secondItem="H4j-jv-5Fx" secondAttribute="leading" id="fPo-j1-vgm"/>
@@ -324,7 +310,6 @@
                     <connections>
                         <outlet property="backB" destination="BN4-g0-czI" id="mjW-GV-IaJ"/>
                         <outlet property="editTV" destination="Je6-Uh-0y5" id="KeE-4S-iVQ"/>
-                        <outlet property="saveB" destination="Wl4-pa-LQe" id="IiH-Ib-wGy"/>
                         <segue destination="FVI-7P-5Aa" kind="unwind" identifier="unwindfromswitchedittohome" unwindAction="unwindFromSwitchEditToHome:" id="RcZ-2h-RsV"/>
                     </connections>
                 </viewController>

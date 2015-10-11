@@ -14,6 +14,7 @@
 #import "EngageSerialCommand.h"
 #import "EngageAccessory.h"
 #import "EngageUnit.h"
+#import "Utilities.h"
 
 @interface HomeVC () <UITableViewDelegate, UITableViewDataSource, BTDelegate>
 
@@ -58,7 +59,8 @@
 
 @property (strong, nonatomic) CBPeripheral *connectedToNewP;
 
-@property (nonatomic) BOOL connectToNewMode;
+@property (nonatomic) BOOL connectToNewMode,
+                           dataloaded;
 
 @end
 
@@ -77,8 +79,6 @@
 
 - (IBAction)unwindFromNewSwitch:(UIStoryboardSegue *)sender
 {
- NSLog(@"Unwind to HomeVC from NewSwitchVC");
-
  self.accessoriesA = self.sharedData.primaryUnit.accessories;
  
  [self loadArrays];
@@ -94,23 +94,13 @@
 }
 
 
-- (IBAction)unwindFromCreateSwitch:(UIStoryboardSegue *)sender
-{
- NSLog(@"Unwind to HomeVC from CreateSwitchVC");
-}
-
-
-- (IBAction)unwindFromWrite:(UIStoryboardSegue *)sender
-{
- NSLog(@"Unwind to HomeVC from WriteVC");
-}
-
-
 - (IBAction)unwindFromSwitchEditToHome:(UIStoryboardSegue *)sender
 {
  NSLog(@"Unwind to HomeVC from SwitchEditVC");
  
- self.switchTV.hidden = YES;
+ self.accessoriesA = self.sharedData.primaryUnit.accessories;
+ 
+ [self.switchTV reloadData];
 }
 
 
@@ -126,7 +116,7 @@ EngageAccessory *accessory;
 
  accessory = self.accessoriesA[section];
  
- return [NSString stringWithFormat:@"%@ %@", accessory.brand, accessory.model];
+ return [Utilities stringFromAccessory:accessory];
 }
 
 
@@ -322,19 +312,27 @@ NSString *str;
  self.relaysMA      = NSMutableArray.new;
  self.relayStatusMA = NSMutableArray.new;
  
- self.sharedData.accessories    = @[];
- self.sharedData.functions      = @[];
- self.sharedData.serialCommands = @[];
- self.sharedData.connectors     = @[];
- 
  [self setNameAndNotifier];
  
+ self.dataloaded = NO;
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+ [super viewDidAppear:animated];
+ 
+ self.btComm.delegate = self;
+ 
  [self loadJSONFiles];
+ [self loadArrays];
  
  NSArray *unarchiveArray;
  
- if ((unarchiveArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"primaryUnit"]) != nil)
+ if (((unarchiveArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"primaryUnit"]) != nil) && !self.dataloaded)
     {
+    self.dataloaded = YES;
+    
     for (NSData *primaryUnit in unarchiveArray) self.sharedData.primaryUnit = [NSKeyedUnarchiver unarchiveObjectWithData:primaryUnit];
     
     self.accessoriesA = self.sharedData.primaryUnit.accessories;
@@ -345,20 +343,16 @@ NSString *str;
     self.switchTV.hidden   = NO;
     self.addSwitchB.hidden = YES;
     self.editB.hidden      = NO;
+    
+    [self.switchTV reloadData];
     }
-}
-
-
-- (void)viewDidAppear:(BOOL)animated
-{
- [super viewDidAppear:animated];
  
- self.btComm.delegate = self;
+// if (self.btComm.activePeripheral == nil) [self loadSwitchArray];     //  no active peripheral exists so load new data and scan
+// else                                     [self.switchTV reloadData]; // active peripheral exists so just reload the table to show which one is connected
  
- if (self.btComm.activePeripheral == nil) [self loadSwitchArray];     //  no active peripheral exists so load new data and scan
- else                                     [self.switchTV reloadData]; // active peripheral exists so just reload the table to show which one is connected
+// if (self.btComm.activePeripheral != nil) [self.switchTV reloadData];
  
- [self scanForPeripherals];
+ if (self.accessoriesA != nil) [self scanForPeripherals];
 }
 
 
@@ -417,7 +411,7 @@ NSString *str;
 
 - (void)scanTimer:(NSTimer *)timer
 {
- [self.switchTV reloadData];
+// [self.switchTV reloadData];
 }
 
 
@@ -427,30 +421,6 @@ NSString *str;
  [self.btRSSIMA        addObject:RSSI];
  
  [self.btComm connect:peripheral];
-}
-
-
-- (void)loadSwitchArray
-{
- NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
- 
- if ((self.sharedData.savedSwitchData = [defaults objectForKey:@"switchArray"]) != nil)  // if switch data is already saved on phone
-    {
-    self.counter = 0;
-    
-    self.switchObjectIdMA = NSMutableArray.new;
-    self.switchUUIDMA     = NSMutableArray.new;
-    
-    for (NSDictionary *d in self.sharedData.savedSwitchData)
-       {
-       [self.switchObjectIdMA addObject:d[@"objectId"]];
-       [self.switchUUIDMA     addObject:[[NSUUID alloc] initWithUUIDString:d[@"uuid"]]];
-       }
- 
-    self.retrievedPeripheralsA = [self.btComm.manager retrievePeripheralsWithIdentifiers:self.switchUUIDMA];
-    
-    [self lookupSwitchData];
-    }
 }
 
 
@@ -486,7 +456,7 @@ NSString *str;
 NSArray *dataPaths;
 NSMutableArray *data;
 
- dataPaths = @[@"Accessory", @"AccessoryFunction", @"SerialCommand", @"Connector"];
+ dataPaths = @[@"AccessoryFunction", @"SerialCommand", @"Connector", @"Accessory"];
  
  data = NSMutableArray.new;
  
@@ -503,11 +473,13 @@ NSMutableArray *data;
  for (int i = 0; i < data.count; i++)
     switch (i)
        {
-       case 0 : self.sharedData.accessories    = data[i];
-       case 1 : self.sharedData.functions      = data[i];
-       case 2 : self.sharedData.serialCommands = data[i];
-       case 3 : self.sharedData.connectors     = data[i];
+       case 0 : self.sharedData.functions      = data[i];
+       case 1 : self.sharedData.serialCommands = data[i];
+       case 2 : self.sharedData.connectors     = data[i];
+       case 3 : self.sharedData.accessories    = [Utilities buildAccessoryArrayFromSourceArray:data[i]];
        }
+ 
+//  self.accessoriesA = self.sharedData.accessories;
 }
 
 
@@ -627,7 +599,6 @@ NSMutableArray *data;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
  [self.btComm stopScan];
- 
 }
 
 
